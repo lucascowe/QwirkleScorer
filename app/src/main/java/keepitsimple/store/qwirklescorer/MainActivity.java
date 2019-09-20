@@ -1,13 +1,20 @@
 package keepitsimple.store.qwirklescorer;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,6 +27,112 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     RecyclerView recyclerView;
     RecAdapter recAdapter;
     ArrayList<Player> players;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void addPlayer() {
+        final EditText inputEditText = new EditText(this);
+        inputEditText.setText("");
+
+        new AlertDialog.Builder(this)
+            .setTitle("Add Player")
+            .setMessage("Enter Player Name")
+            .setView(inputEditText)
+            .setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (inputEditText.getText().toString() != "") {
+                        players.add(new Player(inputEditText.getText().toString()));
+                        recAdapter.notifyDataSetChanged();
+                    }
+                }
+            })
+            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (inputEditText.getText().toString() != "") {
+                        players.add(new Player(inputEditText.getText().toString()));
+                        recAdapter.notifyDataSetChanged();
+                        addPlayer();
+                    }
+                }
+            })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // do nothing
+                    }
+                })
+            .show();
+    }
+
+    public void renamePlayer() {
+        final EditText inputEditText = new EditText(this);
+        int i;
+        for (i = 0; i < players.size(); i++) {
+            if (players.get(i).isSelected()) {
+                break;
+            }
+        }
+        final int pos = i;
+
+        inputEditText.setText(players.get(pos).getName());
+
+        new AlertDialog.Builder(this)
+                .setTitle("Add Player")
+                .setMessage("Enter Player Name")
+                .setView(inputEditText)
+                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (inputEditText.getText().toString() != "") {
+                            players.get(pos).setName(inputEditText.getText().toString());
+                            recAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // do nothing
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.newPlayer:
+                addPlayer();
+            case R.id.rename:
+                renamePlayer();
+                break;
+            case R.id.delete:
+                for (int i = 0; i < players.size(); i++) {
+                    if (players.get(i).isSelected()) {
+                        players.remove(i);
+                        break;
+                    }
+                }
+                recAdapter.notifyDataSetChanged();
+            case R.id.deleteAll:
+                players.clear();
+                recAdapter.notifyDataSetChanged();
+            case R.id.edit:
+                // edit scores activity
+            default:
+                Log.e("Menu","Invalid menu option");
+        }
+        return true;
+    }
 
     public void saveTurn() {
         players.get(playerTurn).addScore(moveString, turnScore);
@@ -120,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         playerTurn = 0;
         players.get(playerTurn).setSelected(true);
         initRecycler();
-
+        addPlayer();
     }
 
     @Override
@@ -130,7 +243,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     @Override
     public boolean onRecLongClick(int position) {
-        return false;
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setSelected(false);
+        }
+        players.get(position).setSelected(true);
+        recAdapter.notifyDataSetChanged();
+        return true;
     }
 }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="New Player" android:id="@+id/newList"></item>
+    <item android:title="New Player" android:id="@+id/newPlayer"></item>
     <item android:title="Rename Player" android:id="@+id/rename"></item>
     <item android:title="Delete Player" android:id="@+id/delete"></item>
+    <item android:title="Delete All" android:id="@+id/deleteAll"></item>
     <item android:title="Edit Scores" android:id="@+id/edit"></item>
 </menu>
