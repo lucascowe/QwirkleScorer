@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             .setPositiveButton("Finished", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    if (inputEditText.getText().toString() != "") {
+                    if (!inputEditText.getText().toString().equals("")) {
                         players.add(new Player(inputEditText.getText().toString()));
                         recAdapter.notifyDataSetChanged();
                     }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             .setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    if (inputEditText.getText().toString() != "") {
+                    if (!inputEditText.getText().toString().equals("")) {
                         players.add(new Player(inputEditText.getText().toString()));
                         recAdapter.notifyDataSetChanged();
                         addPlayer();
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 .setPositiveButton("Next", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (inputEditText.getText().toString() != "") {
+                        if (!inputEditText.getText().toString().equals("")) {
                             players.get(pos).setName(inputEditText.getText().toString());
                             recAdapter.notifyDataSetChanged();
                         }
@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         switch (item.getItemId()) {
             case R.id.newPlayer:
                 addPlayer();
+                if (players.size() == 1) {
+                    players.get(0).setSelected(true);
+                }
                 break;
             case R.id.rename:
                 if (players.size() > 0) {
@@ -164,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 turnScore += num;
                 // if not first move, add +
                 if (moveString.length() > 0) {
-                    moveString += " + " + String.valueOf(num);
+                    moveString += " + " + (num);
                 } else {
                     moveString = String.valueOf(num);
                 }
