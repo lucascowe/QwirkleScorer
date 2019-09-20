@@ -112,22 +112,29 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         switch (item.getItemId()) {
             case R.id.newPlayer:
                 addPlayer();
+                break;
             case R.id.rename:
-                renamePlayer();
+                if (players.size() > 0) {
+                    renamePlayer();
+                }
                 break;
             case R.id.delete:
-                for (int i = 0; i < players.size(); i++) {
-                    if (players.get(i).isSelected()) {
-                        players.remove(i);
-                        break;
+                if (players.size() > 0) {
+                    for (int i = 0; i < players.size(); i++) {
+                        if (players.get(i).isSelected()) {
+                            players.remove(i);
+                            break;
+                        }
                     }
+                    recAdapter.notifyDataSetChanged();
                 }
-                recAdapter.notifyDataSetChanged();
+                break;
             case R.id.deleteAll:
                 players.clear();
                 recAdapter.notifyDataSetChanged();
+                break;
             case R.id.edit:
-                // edit scores activity
+                // loads edit/history activity
             default:
                 Log.e("Menu","Invalid menu option");
         }
