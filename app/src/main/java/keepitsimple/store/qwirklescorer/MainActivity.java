@@ -1,6 +1,8 @@
 package keepitsimple.store.qwirklescorer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,15 +10,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    int turnScore;
+public class MainActivity extends AppCompatActivity implements RecAdapter.RecListener{
+
+    int turnScore, playerTurn;
     String moveString = "";
     TextView txvCurrentMove;
+    RecyclerView recyclerView;
+    RecAdapter recAdapter;
+    ArrayList<Player> players;
+
+    public void saveTurn() {
+        players.get(playerTurn).addScore(moveString, turnScore);
+        players.get(playerTurn).setSelected(false);
+        playerTurn = (playerTurn + 1) % players.size();
+        players.get(playerTurn).setSelected(true);
+        recAdapter.notifyDataSetChanged();
+        turnScore = 0;
+        moveString = "";
+        txvCurrentMove.setText("");
+    }
 
     public void onClick (View view) {
         Button button = (Button) view;
-        Log.i("Debug","Button pressed");
         int num = Integer.parseInt(button.getTag().toString());
         switch (num) {
             case 1:
@@ -31,12 +48,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     moveString = String.valueOf(num);
                 }
-                Log.i("Debug","move so far is " + moveString);
                 txvCurrentMove.setText(moveString);
                 break;
             case 6:
-                Log.i("Debug","Q" + moveString);
-
                 turnScore += 12;
                 // if not first move, add +
                 if (moveString.length() > 0) {
@@ -48,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             // save
             case 7:
+                saveTurn();
                 break;
             // clear
             case 8:
@@ -56,32 +71,38 @@ public class MainActivity extends AppCompatActivity {
                 break;
             // delete
             case 9:
-                String[] turns = moveString.split(" ",12);
+                String[] turns = moveString.split(" ",48);
                 moveString = "";
                 turnScore = 0;
                 for (int i = 0; i < turns.length - 1; i+= 2) {
-                    Log.i("Debug","this string is:  " + turns[i]);
                     if (i == 0) {
                         moveString = String.format("%s",turns[i]);
                     } else {
                         moveString = String.format("%s + %s", moveString, turns[i]);
                     }
-                    if (turns[i].equals("QWIRLE")) {
+                    if (turns[i].equals("QWIRKLE")) {
                         turnScore += 12;
                     } else {
+                        Log.i("debug","passing " + turns[i]);
                         turnScore += Integer.parseInt(turns[i]);
                     }
                 }
                 break;
             default:
                 Log.i("Error","Invalid button tag");
-
         }
         txvCurrentMove.setText(moveString);
-        Log.i("Debug","Score is " + turnScore);
-
     }
 
+    public void initRecycler() {
+        // link Adapter to list
+        recAdapter = new RecAdapter(players,this);
+
+        // Set up Recycler manager to link to adapter
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(recAdapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +110,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         txvCurrentMove = findViewById(R.id.textView);
         txvCurrentMove.setText("");
+        recyclerView = findViewById(R.id.recyclerView);
+
+        players = new ArrayList<>();
+        players.add(new Player("Player 1"));
+        players.add(new Player("Player 2"));
+        players.add(new Player("Player 3"));
+        players.add(new Player("Player 4"));
+        playerTurn = 0;
+        players.get(playerTurn).setSelected(true);
+        initRecycler();
+
+    }
+
+    @Override
+    public void onRecClick(int position) {
+
+    }
+
+    @Override
+    public boolean onRecLongClick(int position) {
+        return false;
     }
 }
 

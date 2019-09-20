@@ -1,4 +1,5 @@
-import android.util.Log;
+package keepitsimple.store.qwirklescorer;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
-    private ArrayList<GeneralRecyclerList> recyclerList;
+    private ArrayList<Player> recyclerList;
     private RecListener recListener;
-    private boolean selectorMode = false;
 
-    public boolean isSelectorMode() {
-        return selectorMode;
-    }
-
-    public void setSelectorMode(boolean selectorMode) {
-        this.selectorMode = selectorMode;
-        if (false == selectorMode){
-            for (int i = 0; i < recyclerList.size(); i++) {
-                recyclerList.get(i).setSelected(false);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    public RecAdapter(ArrayList<GeneralRecyclerList> list, RecListener listener) {
+    public RecAdapter(ArrayList<Player> list, RecListener listener) {
         this.recyclerList = list;
         this.recListener = listener;
     }
@@ -49,6 +35,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
             data4 = itemView.findViewById(R.id.tvData4);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
 
+
             this.mRecListener = recListener;
 
             itemView.setOnClickListener(this);
@@ -58,33 +45,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (selectorMode) {
-                recyclerList.get(position).setSelected(!recyclerList.get(position).getSelected());
-            } else {
-                Log.i("position from click", String.valueOf(position));
-            }
+
             recListener.onRecClick(position);
         }
 
         @Override
         public boolean onLongClick(View view) {
             int position = getAdapterPosition();
-            Log.i("long","detecetd " + position);
-            selectorMode = !selectorMode;
-            if (selectorMode) {
-                recListener.onRecLongClick(position);
-                Log.i("long", "selection mode turned on");
-                selectorMode = true;
-                try {
-                    recyclerList.get(position).setSelected(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("selected", "Couldn't set selected");
-                }
-                Log.i("Long Click on", String.valueOf(position));
-            } else {
-                setSelectorMode(false);
-            }
+
             recListener.onRecLongClick(position);
             return true;
         }
@@ -104,11 +72,11 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
-        holder.header.setText(recyclerList.get(position).getData1());
-        holder.comment.setText(recyclerList.get(position).getData2());
-        holder.data3.setText(recyclerList.get(position).getData3());
-        holder.data4.setText(recyclerList.get(position).getData4());
-        if (recyclerList.get(position).getSelected()) {
+        holder.header.setText(recyclerList.get(position).getName());
+        holder.comment.setText(recyclerList.get(position).getLatestTurn());
+        holder.data3.setText(String.valueOf(recyclerList.get(position).getTurns()));
+        holder.data4.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
+        if (recyclerList.get(position).isSelected()) {
             holder.relativeLayout.setBackgroundColor(0xFF2196F3);
         } else {
             holder.relativeLayout.setBackgroundColor(0);
