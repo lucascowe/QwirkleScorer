@@ -16,7 +16,7 @@
         android:layout_width="395dp"
         android:layout_height="26dp"
         android:layout_alignParentTop="true"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Header" />
 
@@ -31,15 +31,15 @@
         android:id="@+id/tvData3"
         android:layout_width="83dp"
         android:layout_height="20dp"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@id/tvData4"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/tvData4"
         tools:text="Data3" />
 
     <TextView
         android:id="@+id/tvData4"
         android:layout_width="61dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         tools:text="Data4" />
 
 </RelativeLayout>
