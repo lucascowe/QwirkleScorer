@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="384dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:numColumns="4"
+        android:rowCount="1"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayoutsave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="ice_cream_sandwich">
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:onClick="onClick"
+            android:tag="2"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:onClick="onClick"
+            android:tag="3"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:onClick="onClick"
+            android:tag="4"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:onClick="onClick"
+            android:tag="5"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="4"
+            android:tag="9"
+            android:onClick="onClick"
+            android:text="DEL" />
+
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="5"
+            android:onClick="onClick"
+            android:tag="8"
+            android:text="CLR" />
+
+    </GridLayout>
+
+    <GridLayout
+        android:id="@+id/gridLayoutsave"
+        android:layout_width="384dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:numColumns="3"
+        android:rowCount="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="256dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:tag="6"
+            android:onClick="onClick"
+            android:text="QWIRKLE" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="128dp"
+            android:layout_height="64dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:tag="7"
+            android:onClick="onClick"
+            android:text="SAVE" />
+
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="384dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
