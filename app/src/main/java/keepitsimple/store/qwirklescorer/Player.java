@@ -2,9 +2,10 @@ package keepitsimple.store.qwirklescorer;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-class Player {
+class Player implements Serializable {
     private String name;
     private ArrayList<String> turn;
     private int totalScore;

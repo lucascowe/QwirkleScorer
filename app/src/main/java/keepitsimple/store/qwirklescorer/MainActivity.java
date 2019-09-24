@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     TextView txvCurrentMove;
     RecyclerView recyclerView;
     RecAdapter recAdapter;
-    ArrayList<Player> players;
+    public ArrayList<Player> players;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,7 +138,11 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 recAdapter.notifyDataSetChanged();
                 break;
             case R.id.edit:
-                // loads edit/history activity
+
+                Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
+                intent.putExtra("Players", players);
+                startActivity(intent);
+
             default:
                 Log.e("Menu","Invalid menu option");
         }
