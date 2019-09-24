@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,40 +38,74 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     public void addPlayer() {
-        final EditText inputEditText = new EditText(this);
+        Button btnAdd, btnCancel, btnFinish;
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.add_player);
+        final EditText inputEditText;
+        inputEditText = dialog.findViewById(R.id.editTextDialogName);
         inputEditText.setText("");
+        dialog.setTitle("Add Player");
+        dialog.setCancelable(true);
+        btnCancel = dialog.findViewById(R.id.btnDialogCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();            }
+        });
+        btnAdd = dialog.findViewById(R.id.btnDialogAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                players.add(new Player(inputEditText.getText().toString()));
+                recAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+                addPlayer();
+            }
+        });
+        btnFinish = dialog.findViewById(R.id.btnDialogFinish);
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                players.add(new Player(inputEditText.getText().toString()));
+                recAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
 
-        new AlertDialog.Builder(this)
-            .setTitle("Add Player")
-            .setMessage("Enter Player Name")
-            .setView(inputEditText)
-            .setPositiveButton("Finished", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (!inputEditText.getText().toString().equals("")) {
-                        players.add(new Player(inputEditText.getText().toString()));
-                        recAdapter.notifyDataSetChanged();
-                    }
-                }
-            })
-            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (!inputEditText.getText().toString().equals("")) {
-                        players.add(new Player(inputEditText.getText().toString()));
-                        recAdapter.notifyDataSetChanged();
-                        addPlayer();
-                    }
-                }
-            })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // do nothing
-                    }
-                })
-            .show();
+
+//        new AlertDialog.Builder(this)
+//            .setTitle("Add Player")
+//            .setMessage("Enter Player Name")
+//            .setView(inputEditText)
+//            .setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    if (!inputEditText.getText().toString().equals("")) {
+//                        players.add(new Player(inputEditText.getText().toString()));
+//                        recAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//            })
+//            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    if (!inputEditText.getText().toString().equals("")) {
+//                        players.add(new Player(inputEditText.getText().toString()));
+//                        recAdapter.notifyDataSetChanged();
+//                        addPlayer();
+//                    }
+//                }
+//            })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // do nothing
+//                    }
+//                })
+//            .show();
     }
+
 
     public void renamePlayer() {
         final EditText inputEditText = new EditText(this);
