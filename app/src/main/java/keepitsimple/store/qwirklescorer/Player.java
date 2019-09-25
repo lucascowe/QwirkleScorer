@@ -1,7 +1,5 @@
 package keepitsimple.store.qwirklescorer;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 class Player {
@@ -13,7 +11,7 @@ class Player {
 
     Player(String player) {
         if (player.isEmpty()) {
-            player = "This player needs a name";
+            player = "Player X";
         }
         this.name = player;
         this.turn = new ArrayList<>();
