@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     RecyclerView recyclerView;
     RecAdapter recAdapter;
     public ArrayList<Player> players;
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,34 +89,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             }
         }
         return 0;
-    }
-
-    public void renamePlayer() {
-        final EditText inputEditText = new EditText(this);
-        final int pos = findSelectedPlayer();
-
-        inputEditText.setText(players.get(pos).getName());
-
-        new AlertDialog.Builder(this)
-                .setTitle("Add Player")
-                .setMessage("Enter Player Name")
-                .setView(inputEditText)
-                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!inputEditText.getText().toString().equals("")) {
-                            players.get(pos).setName(inputEditText.getText().toString());
-                            recAdapter.notifyDataSetChanged();
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // do nothing
-                    }
-                })
-                .show();
     }
 
     @Override

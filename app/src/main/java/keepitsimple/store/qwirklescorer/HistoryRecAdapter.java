@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class HistoryRecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
+public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
     private ArrayList<Player> recyclerList;
     private RecListener recListener;
 
@@ -76,7 +76,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        holder.turn.setText(recyclerList.get(position).getTurn());
+        holder.turn.setText(Integer.toString(recyclerList.get(position).getTurn()));
         holder.player1.setText(recyclerList.get(position).getLatestTurn());
         holder.player2.setText(String.valueOf(recyclerList.get(position).getTurns()));
         holder.player3.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
