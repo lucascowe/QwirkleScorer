@@ -28,8 +28,8 @@ class Player {
         this.name = name;
     }
 
-    ArrayList<String> getTurn() {
-        return turn;
+    String getTurn(int p) {
+        return turn.get(p);
     }
 
     int getTotalScore() {
