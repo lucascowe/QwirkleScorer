@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,32 +36,41 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void addPlayer() {
+    public void playerName(Boolean isNewPlayer) {
         Button btnAdd, btnCancel, btnFinish;
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.add_player);
         final EditText inputEditText;
         inputEditText = dialog.findViewById(R.id.editTextDialogName);
-        inputEditText.setText("");
-        dialog.setTitle("Add Player");
-        dialog.setCancelable(true);
         btnCancel = dialog.findViewById(R.id.btnDialogCancel);
+        btnAdd = dialog.findViewById(R.id.btnDialogAdd);
+        btnFinish = dialog.findViewById(R.id.btnDialogFinish);
+        if (isNewPlayer) {
+            inputEditText.setText("");
+            dialog.setTitle("Add player");
+            dialog.setCancelable(true);
+        } else {
+            inputEditText.setText(players.get(findSelectedPlayer()).getName());
+            dialog.setTitle("Rename Player");
+            dialog.setCancelable(true);
+            btnFinish.setText("Save");
+            btnAdd.setVisibility(View.INVISIBLE);
+        }
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();            }
         });
-        btnAdd = dialog.findViewById(R.id.btnDialogAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 players.add(new Player(inputEditText.getText().toString()));
                 recAdapter.notifyDataSetChanged();
                 dialog.dismiss();
-                addPlayer();
+                playerName(true);
             }
         });
-        btnFinish = dialog.findViewById(R.id.btnDialogFinish);
+
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,73 +80,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             }
         });
         dialog.show();
-
-
-//        new AlertDialog.Builder(this)
-//            .setTitle("Add Player")
-//            .setMessage("Enter Player Name")
-//            .setView(inputEditText)
-//            .setPositiveButton("Finished", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    if (!inputEditText.getText().toString().equals("")) {
-//                        players.add(new Player(inputEditText.getText().toString()));
-//                        recAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//            })
-//            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    if (!inputEditText.getText().toString().equals("")) {
-//                        players.add(new Player(inputEditText.getText().toString()));
-//                        recAdapter.notifyDataSetChanged();
-//                        addPlayer();
-//                    }
-//                }
-//            })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        // do nothing
-//                    }
-//                })
-//            .show();
     }
 
-
-    public void renamePlayer() {
-        final EditText inputEditText = new EditText(this);
-        int i;
-        for (i = 0; i < players.size(); i++) {
+    int findSelectedPlayer() {
+        for (int i = 0; i < players.size(); i++) {
             if (players.get(i).isSelected()) {
-                break;
+                return i;
             }
         }
-        final int pos = i;
-
-        inputEditText.setText(players.get(pos).getName());
-
-        new AlertDialog.Builder(this)
-                .setTitle("Add Player")
-                .setMessage("Enter Player Name")
-                .setView(inputEditText)
-                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!inputEditText.getText().toString().equals("")) {
-                            players.get(pos).setName(inputEditText.getText().toString());
-                            recAdapter.notifyDataSetChanged();
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // do nothing
-                    }
-                })
-                .show();
+        return 0;
     }
 
     @Override
@@ -147,14 +97,14 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
         switch (item.getItemId()) {
             case R.id.newPlayer:
-                addPlayer();
+                playerName(true);
                 if (players.size() == 1) {
                     players.get(0).setSelected(true);
                 }
                 break;
             case R.id.rename:
                 if (players.size() > 0) {
-                    renamePlayer();
+                    playerName(false);
                 }
                 break;
             case R.id.delete:
@@ -283,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         playerTurn = 0;
         players.get(playerTurn).setSelected(true);
         initRecycler();
-        addPlayer();
+        playerName(true);
     }
 
     @Override

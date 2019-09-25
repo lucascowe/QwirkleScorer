@@ -1,11 +1,8 @@
 package keepitsimple.store.qwirklescorer;
 
-import android.util.Log;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
-class Player implements Serializable {
+class Player {
     private String name;
     private ArrayList<String> turn;
     private int totalScore;
@@ -14,7 +11,7 @@ class Player implements Serializable {
 
     Player(String player) {
         if (player.isEmpty()) {
-            player = "This player needs a name";
+            player = "Player X";
         }
         this.name = player;
         this.turn = new ArrayList<>();
@@ -31,8 +28,8 @@ class Player implements Serializable {
         this.name = name;
     }
 
-    ArrayList<String> getTurn() {
-        return turn;
+    String getTurn(int p) {
+        return turn.get(p);
     }
 
     int getTotalScore() {
