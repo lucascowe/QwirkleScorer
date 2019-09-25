@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class HistoryRecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
+public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
     private ArrayList<Player> recyclerList;
     private RecListener recListener;
 
@@ -74,12 +74,15 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolde
         return new ViewHolder(view,recListener);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        holder.turn.setText(recyclerList.get(position).getTurn());
-        holder.player1.setText(recyclerList.get(position).getLatestTurn());
-        holder.player2.setText(String.valueOf(recyclerList.get(position).getTurns()));
-        holder.player3.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
+        holder.turn.setText(Integer.toString(position));
+        holder.player1.setText(String.valueOf(recyclerList.get(0).getTurn(position));
+        holder.player2.setText(String.valueOf(recyclerList.get(1).getTurn(position));
+        holder.player3.setText(String.valueOf(recyclerList.get(2).getTurn(position));
+        holder.player4.setText(String.valueOf(recyclerList.get(3).getTurn(position));
         if (recyclerList.get(position).isSelected()) {
             holder.linearLayout.setBackgroundColor(0xFF2196F3);
         } else {
