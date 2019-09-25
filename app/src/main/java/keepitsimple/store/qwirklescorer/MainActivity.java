@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     TextView txvCurrentMove;
     RecyclerView recyclerView;
     RecAdapter recAdapter;
-    public ArrayList<Player> players;
+    static public ArrayList<Player> players;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,9 +123,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 recAdapter.notifyDataSetChanged();
                 break;
             case R.id.edit:
-
                 Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
-                intent.putExtra("Players", players);
+//                intent.putExtra("Players", players);
                 startActivity(intent);
 
             default:

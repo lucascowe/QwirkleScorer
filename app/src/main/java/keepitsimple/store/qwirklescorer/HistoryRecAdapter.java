@@ -74,8 +74,6 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         return new ViewHolder(view,recListener);
     }
 
-
-
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
         holder.turn.setText(Integer.toString(position));
