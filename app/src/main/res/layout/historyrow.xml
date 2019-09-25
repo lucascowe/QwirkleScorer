@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="25dp">
+
+        <TextView
+            android:id="@+id/turnTextView"
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="XX" />
+
+        <TextView
+            android:id="@+id/player1TextView"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Player 1" />
+
+        <TextView
+            android:id="@+id/player2TextView"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Player 2" />
+
+        <TextView
+            android:id="@+id/player3TextView"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Player 3" />
+
+        <TextView
+            android:id="@+id/player4TextView"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Player 4" />
+
+
+    </TableRow>
+</LinearLayout>

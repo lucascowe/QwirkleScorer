@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".HistoryActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyRecyclerView"
+        android:layout_width="412dp"
+        android:layout_height="691dp"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="40dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
