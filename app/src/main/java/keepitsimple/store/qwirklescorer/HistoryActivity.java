@@ -17,7 +17,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        Intent intent = getIntent();
+        initRecycler();
     }
 
     public void initRecycler() {
