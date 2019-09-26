@@ -16,7 +16,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     private ArrayList<Player> recyclerList;
     private RecListener recListener;
 
-    public RecAdapter(ArrayList<Player> list, RecListener listener) {
+    RecAdapter(ArrayList<Player> list, RecListener listener) {
         this.recyclerList = list;
         this.recListener = listener;
     }
@@ -27,7 +27,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         RecListener mRecListener;
         RelativeLayout relativeLayout;
 
-        public ViewHolder(@NonNull View itemView, RecListener recListener) {
+        ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
 
             header = itemView.findViewById(R.id.tvHeader);
@@ -74,7 +74,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
         holder.header.setText(recyclerList.get(position).getName());
-        holder.comment.setText(recyclerList.get(position).getLatestTurn());
+        holder.comment.setText(recyclerList.get(position).getTurn());
         holder.data3.setText(String.valueOf(recyclerList.get(position).getTurns()));
         holder.data4.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
         if (recyclerList.get(position).isSelected()) {

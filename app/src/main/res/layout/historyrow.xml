@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="25dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/turnTextView"
@@ -15,6 +15,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="XX" />
+
+        <TextView
+            android:id="@+id/player0TextView"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Player 0" />
 
         <TextView
             android:id="@+id/player1TextView"
@@ -36,14 +43,5 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Player 3" />
-
-        <TextView
-            android:id="@+id/player4TextView"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Player 4" />
-
-
     </TableRow>
-</LinearLayout>
+</RelativeLayout>

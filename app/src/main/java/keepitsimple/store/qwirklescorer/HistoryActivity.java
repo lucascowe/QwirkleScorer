@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity implements HistoryRecAdapter.RecListener {
     RecyclerView recyclerView;
     HistoryRecAdapter historyRecAdapter;
 
@@ -21,12 +23,23 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public void initRecycler() {
-        // link Adapter to list
-        historyRecAdapter = new HistoryRecAdapter(MainActivity.players, (HistoryRecAdapter.RecListener) this);
+        // link Adapter to
+        recyclerView = findViewById(R.id.historyRecyclerView);
+        historyRecAdapter = new HistoryRecAdapter(MainActivity.scoreHistory, this);
 
         // Set up Recycler manager to link to adapter
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(historyRecAdapter);
+    }
+
+    @Override
+    public void onRecClick(int position) {
+
+    }
+
+    @Override
+    public boolean onRecLongClick(int position) {
+        return false;
     }
 }

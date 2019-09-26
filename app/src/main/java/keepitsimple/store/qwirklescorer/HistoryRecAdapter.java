@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
-    private ArrayList<Player> recyclerList;
+    private ArrayList<RoundScore> recyclerList;
     private RecListener recListener;
 
-    public HistoryRecAdapter(ArrayList<Player> list, RecListener listener) {
+    HistoryRecAdapter(ArrayList<RoundScore> list, RecListener listener) {
         this.recyclerList = list;
         this.recListener = listener;
     }
@@ -25,20 +25,19 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView turn, player1, player2, player3, player4;
+        TextView players[] = {player1, player2, player3, player4};
         RecListener mRecListener;
-        LinearLayout linearLayout;
+        RelativeLayout relativeLayout;
 
-        public ViewHolder(@NonNull View itemView, RecListener recListener) {
+        ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
 
             turn = itemView.findViewById(R.id.turnTextView);
-            player1 = itemView.findViewById(R.id.player1TextView);
-            player2 = itemView.findViewById(R.id.player2TextView);
-            player3 = itemView.findViewById(R.id.player3TextView);
-            player4 = itemView.findViewById(R.id.player4TextView);
-            linearLayout = itemView.findViewById(R.id.linearLayout);
-
-
+            players[0] = itemView.findViewById(R.id.player0TextView);
+            players[1] = itemView.findViewById(R.id.player1TextView);
+            players[2] = itemView.findViewById(R.id.player2TextView);
+            players[3] = itemView.findViewById(R.id.player3TextView);
+            relativeLayout = itemView.findViewById(R.id.relativeLayout);
 
             this.mRecListener = recListener;
 
@@ -77,14 +76,8 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
         holder.turn.setText(Integer.toString(position));
-        holder.player1.setText(String.valueOf(recyclerList.get(0).getTurn(position)));
-        holder.player2.setText(String.valueOf(recyclerList.get(1).getTurn(position)));
-        holder.player3.setText(String.valueOf(recyclerList.get(2).getTurn(position)));
-        holder.player4.setText(String.valueOf(recyclerList.get(3).getTurn(position)));
-        if (recyclerList.get(position).isSelected()) {
-            holder.linearLayout.setBackgroundColor(0xFF2196F3);
-        } else {
-            holder.linearLayout.setBackgroundColor(0);
+        for (int i = 0; i < MainActivity.players.size(); i++) {
+            holder.players[i].setText(String.valueOf(recyclerList.get(position).getTurn(i)));
         }
     }
 

@@ -1,7 +1,6 @@
 package keepitsimple.store.qwirklescorer;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     RecyclerView recyclerView;
     RecAdapter recAdapter;
     static public ArrayList<Player> players;
+    static public ArrayList<RoundScore> scoreHistory;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
 //                intent.putExtra("Players", players);
                 startActivity(intent);
-
+                break;
             default:
                 Log.e("Menu","Invalid menu option");
         }
@@ -135,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     public void saveTurn() {
         players.get(playerTurn).addScore(moveString, turnScore);
+        if (players.get(playerTurn).getTurns() > scoreHistory.size()) {
+            scoreHistory.add(new RoundScore());
+        }
+        scoreHistory.get(players.get(playerTurn).getTurns() - 1).addScore(playerTurn, turnScore,moveString);
         players.get(playerTurn).setSelected(false);
         playerTurn = (playerTurn + 1) % players.size();
         players.get(playerTurn).setSelected(true);
@@ -208,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     public void initRecycler() {
         // link Adapter to list
+        recyclerView = findViewById(R.id.recyclerView);
         recAdapter = new RecAdapter(players,this);
 
         // Set up Recycler manager to link to adapter
@@ -222,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         setContentView(R.layout.activity_main);
         txvCurrentMove = findViewById(R.id.textView);
         txvCurrentMove.setText("");
-        recyclerView = findViewById(R.id.recyclerView);
 
         players = new ArrayList<>();
         players.add(new Player("Player 1"));
@@ -231,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.add(new Player("Player 4"));
         playerTurn = 0;
         players.get(playerTurn).setSelected(true);
+        scoreHistory = new ArrayList<>();
         initRecycler();
         playerName(true);
     }

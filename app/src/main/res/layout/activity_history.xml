@@ -10,6 +10,10 @@
         android:id="@+id/historyRecyclerView"
         android:layout_width="412dp"
         android:layout_height="691dp"
-        tools:layout_editor_absoluteX="-1dp"
-        tools:layout_editor_absoluteY="40dp" />
+        android:layout_marginBottom="115dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

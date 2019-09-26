@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Player {
     private String name;
-    private ArrayList<String> turn;
+    private String latestTurn;
     private int totalScore;
     private int turns;
     private boolean selected;
@@ -14,7 +14,7 @@ class Player {
             player = "Player X";
         }
         this.name = player;
-        this.turn = new ArrayList<>();
+        this.latestTurn = "";
         totalScore = 0;
         turns = 0;
         selected = false;
@@ -28,8 +28,8 @@ class Player {
         this.name = name;
     }
 
-    String getTurn(int p) {
-        return turn.get(p);
+    String getTurn() {
+        return latestTurn;
     }
 
     int getTotalScore() {
@@ -37,26 +37,14 @@ class Player {
     }
 
     void addScore(String turn, int totalScore) {
-        this.turn.add(turn);
+        this.latestTurn = turn;
         this.totalScore += totalScore;
         this.turns++;
     }
 
-    void deleteTurn(int turn) {
-        this.turn.remove(turn);
-    }
-
-    String getLatestTurn() {
-        if (this.turn.size() > 0) {
-            return (String.valueOf(this.turn.get(this.turn.size() - 1)));
-        } else {
-            return "";
-        }
-    }
-
-    void modifyTurn(int turn, String newScore, int scoreChange) {
-        this.turn.set(turn, newScore);
-        this.totalScore += scoreChange;
+    void deleteTurn() {
+        // TODO: need to convert turn to numbers and subtract from total
+        this.latestTurn = "";
     }
 
     int getTurns() {
