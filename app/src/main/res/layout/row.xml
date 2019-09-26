@@ -4,7 +4,7 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FF2196F3"
+    android:background="#662196F3"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
@@ -14,14 +14,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="40">
 
         <TextView
             android:id="@+id/tvHeader"
             android:layout_width="0dp"
-            android:layout_weight="7"
             android:layout_height="26dp"
+            android:layout_weight="27"
+            android:textColor="#FFFFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Header" />
@@ -29,31 +30,35 @@
         <TextView
             android:id="@+id/tvData3"
             android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_marginStart="5dp"
             android:layout_height="20dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="8dp"
+            android:textColor="#FFFFFFFF"
+            android:layout_weight="8"
             tools:text="Data3" />
 
         <TextView
             android:id="@+id/tvData4"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="10"
+            android:textColor="#FFFFFFFF"
             tools:text="Data4" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10">
+
         <TextView
             android:id="@+id/tvComment"
             android:layout_width="0dp"
-            android:layout_weight="6"
             android:layout_height="20dp"
+            android:layout_weight="6"
+            android:textColor="#FFFFFFFF"
             tools:text="Comment" />
     </LinearLayout>
 

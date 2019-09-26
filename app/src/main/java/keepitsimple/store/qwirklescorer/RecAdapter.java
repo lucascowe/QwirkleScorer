@@ -78,9 +78,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         holder.data3.setText(String.valueOf(recyclerList.get(position).getTurns()));
         holder.data4.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
         if (recyclerList.get(position).isSelected()) {
-            holder.linearLayout.setBackgroundColor(0xFF2196F3);
+            holder.linearLayout.setBackgroundColor(0xAA2196F3);
         } else {
-            holder.linearLayout.setBackgroundColor(0);
+            holder.linearLayout.setBackgroundColor(0x66111111);
         }
     }
 
