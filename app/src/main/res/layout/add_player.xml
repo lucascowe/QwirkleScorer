@@ -14,13 +14,14 @@
         android:layout_margin="16dp"
         android:layout_marginStart="8dp"
         android:text="Player Name:"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextDialogName"
-        android:layout_width="wrap_content"
+        android:inputType="text"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginStart="8dp"

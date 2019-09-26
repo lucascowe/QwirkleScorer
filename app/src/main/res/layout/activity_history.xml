@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Round"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -74,7 +74,7 @@
                 android:gravity="center_horizontal"
                 android:text="Total"
                 android:textColor="@android:color/white"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -118,11 +118,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
         android:layout_width="412dp"
-        android:layout_height="691dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerDataTableLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/headerDataTableLayout"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

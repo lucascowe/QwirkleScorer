@@ -1,45 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FF2196F3"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="16dp">
 
-
-    <TextView
-        android:id="@+id/tvHeader"
-        android:layout_width="395dp"
-        android:layout_height="26dp"
-        android:layout_alignParentTop="true"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="Header" />
-
-    <TextView
-        android:id="@+id/tvComment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_below="@id/tvHeader"
-        tools:text="Comment" />
-
-    <TextView
-        android:id="@+id/tvData3"
-        android:layout_width="83dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_toStartOf="@id/tvData4"
-        tools:text="Data3" />
-
-    <TextView
-        android:id="@+id/tvData4"
-        android:layout_width="61dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        tools:text="Data4" />
+        android:weightSum="10"
+        android:orientation="horizontal">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="26dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Header" />
+
+        <TextView
+            android:id="@+id/tvData3"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_marginStart="5dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            tools:text="Data3" />
+
+        <TextView
+            android:id="@+id/tvData4"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_height="wrap_content"
+            tools:text="Data4" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvComment"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="20dp"
+            tools:text="Comment" />
+    </LinearLayout>
+
+</LinearLayout>

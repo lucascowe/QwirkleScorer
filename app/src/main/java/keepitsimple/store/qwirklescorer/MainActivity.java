@@ -65,30 +65,26 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newPlayer) {
                     players.add(new Player(inputEditText.getText().toString()));
                     recAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                     playerName(true);
-                } else {
-                    players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
-
-
-                    Log.i("Player " + findSelectedPlayer() + " changed to", inputEditText.getText().toString());
-
-
-                    recAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                }
             }
         });
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                players.add(new Player(inputEditText.getText().toString()));
-                recAdapter.notifyDataSetChanged();
-                dialog.dismiss();
+                if (newPlayer) {
+                    players.add(new Player(inputEditText.getText().toString()));
+                    recAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                } else {
+                    players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
+                    Log.i("Player " + findSelectedPlayer() + " changed to", inputEditText.getText().toString());
+                    recAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
             }
         });
         dialog.show();

@@ -3,7 +3,7 @@ package keepitsimple.store.qwirklescorer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
         TextView header, comment, data3, data4;
         RecListener mRecListener;
-        RelativeLayout relativeLayout;
+        LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
@@ -34,7 +34,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
             comment = itemView.findViewById(R.id.tvComment);
             data3 = itemView.findViewById(R.id.tvData3);
             data4 = itemView.findViewById(R.id.tvData4);
-            relativeLayout = itemView.findViewById(R.id.relativeLayout);
+            linearLayout = itemView.findViewById(R.id.linearLayout);
 
 
             this.mRecListener = recListener;
@@ -78,9 +78,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         holder.data3.setText(String.valueOf(recyclerList.get(position).getTurns()));
         holder.data4.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
         if (recyclerList.get(position).isSelected()) {
-            holder.relativeLayout.setBackgroundColor(0xFF2196F3);
+            holder.linearLayout.setBackgroundColor(0xFF2196F3);
         } else {
-            holder.relativeLayout.setBackgroundColor(0);
+            holder.linearLayout.setBackgroundColor(0);
         }
     }
 

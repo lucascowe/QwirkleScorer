@@ -78,6 +78,11 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         for (int i = 0; i < MainActivity.players.size(); i++) {
             holder.players[i].setText(String.valueOf(recyclerList.get(position).getTurn(i)));
         }
+        if (position % 2 == 1) {
+            holder.relativeLayout.setBackgroundColor(0xFF2196F3);
+        } else {
+            holder.relativeLayout.setBackgroundColor(0);
+        }
     }
 
     @Override
