@@ -6,14 +6,123 @@
     android:layout_height="match_parent"
     tools:context=".HistoryActivity">
 
+    <TableLayout
+        android:id="@+id/headerDataTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/headersTableRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/turnTextView"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Round"
+                android:textSize="8sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player0TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 1"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player1TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 2"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player2TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 3"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player3TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 4"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/scoresTableRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black">
+
+            <TextView
+                android:id="@+id/totalTextView"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Total"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score0TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 1"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score1TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 2"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score2TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 3"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score3TextView"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Player 4"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+        </TableRow>
+    </TableLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
         android:layout_width="412dp"
         android:layout_height="691dp"
-        android:layout_marginBottom="115dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/headerDataTableLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

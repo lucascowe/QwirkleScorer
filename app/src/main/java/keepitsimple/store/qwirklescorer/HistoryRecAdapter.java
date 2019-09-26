@@ -3,7 +3,6 @@ package keepitsimple.store.qwirklescorer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,7 +74,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        holder.turn.setText(Integer.toString(position));
+        holder.turn.setText(Integer.toString(position+1));
         for (int i = 0; i < MainActivity.players.size(); i++) {
             holder.players[i].setText(String.valueOf(recyclerList.get(position).getTurn(i)));
         }

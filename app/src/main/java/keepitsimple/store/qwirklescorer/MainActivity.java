@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     public void playerName(Boolean isNewPlayer) {
         Button btnAdd, btnCancel, btnFinish;
+        final Boolean newPlayer = isNewPlayer;
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.add_player);
         final EditText inputEditText;
@@ -64,10 +65,21 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                players.add(new Player(inputEditText.getText().toString()));
-                recAdapter.notifyDataSetChanged();
-                dialog.dismiss();
-                playerName(true);
+                if (newPlayer) {
+                    players.add(new Player(inputEditText.getText().toString()));
+                    recAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                    playerName(true);
+                } else {
+                    players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
+
+
+                    Log.i("Player " + findSelectedPlayer() + " changed to", inputEditText.getText().toString());
+
+
+                    recAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             case R.id.edit:
                 Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
 //                intent.putExtra("Players", players);
+
                 startActivity(intent);
                 break;
             default:
@@ -137,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.get(playerTurn).addScore(moveString, turnScore);
         if (players.get(playerTurn).getTurns() > scoreHistory.size()) {
             scoreHistory.add(new RoundScore());
+
         }
         scoreHistory.get(players.get(playerTurn).getTurns() - 1).addScore(playerTurn, turnScore,moveString);
         players.get(playerTurn).setSelected(false);
