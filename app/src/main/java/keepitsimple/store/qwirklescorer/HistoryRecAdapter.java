@@ -3,6 +3,7 @@ package keepitsimple.store.qwirklescorer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         TextView turn, player1, player2, player3, player4;
         TextView players[] = {player1, player2, player3, player4};
         RecListener mRecListener;
-        RelativeLayout relativeLayout;
+        LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
@@ -36,7 +37,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
             players[1] = itemView.findViewById(R.id.player1TextView);
             players[2] = itemView.findViewById(R.id.player2TextView);
             players[3] = itemView.findViewById(R.id.player3TextView);
-            relativeLayout = itemView.findViewById(R.id.relativeLayout);
+            linearLayout = itemView.findViewById(R.id.linearLayout);
 
             this.mRecListener = recListener;
 
@@ -79,9 +80,9 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
             holder.players[i].setText(String.valueOf(recyclerList.get(position).getTurn(i)));
         }
         if (position % 2 == 1) {
-            holder.relativeLayout.setBackgroundColor(0xFF2196F3);
+            holder.linearLayout.setBackgroundColor(0xFF2196F3);
         } else {
-            holder.relativeLayout.setBackgroundColor(0);
+            holder.linearLayout.setBackgroundColor(0);
         }
     }
 
