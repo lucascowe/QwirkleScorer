@@ -42,8 +42,15 @@ class Player {
         this.turns++;
     }
 
-    void deleteTurn() {
-        // TODO: need to convert turn to numbers and subtract from total
+    void resetScore() {
+        this.totalScore = 0;
+        this.latestTurn = "";
+        this.turns = 0;
+    }
+
+    void deleteTurn(int score) {
+        this.totalScore -= score;
+        this.turns--;
         this.latestTurn = "";
     }
 

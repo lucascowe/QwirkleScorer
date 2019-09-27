@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,57 +38,61 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     public void playerName(Boolean isNewPlayer) {
-        Button btnAdd, btnCancel, btnFinish;
-        final Boolean newPlayer = isNewPlayer;
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.add_player);
-        final EditText inputEditText;
-        inputEditText = dialog.findViewById(R.id.editTextDialogName);
-        btnCancel = dialog.findViewById(R.id.btnDialogCancel);
-        btnAdd = dialog.findViewById(R.id.btnDialogAdd);
-        btnFinish = dialog.findViewById(R.id.btnDialogFinish);
-        if (isNewPlayer) {
-            inputEditText.setText("");
-            dialog.setTitle("Add player");
-            dialog.setCancelable(true);
-        } else {
-            inputEditText.setText(players.get(findSelectedPlayer()).getName());
-            dialog.setTitle("Rename Player");
-            dialog.setCancelable(true);
-            btnFinish.setText("Save");
-            btnAdd.setVisibility(View.INVISIBLE);
-        }
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();            }
-        });
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (!isNewPlayer || players.size() < 4) {
+            Button btnAdd, btnCancel, btnFinish;
+            final Boolean newPlayer = isNewPlayer;
+            final Dialog dialog = new Dialog(MainActivity.this);
+            dialog.setContentView(R.layout.add_player);
+            final EditText inputEditText;
+            inputEditText = dialog.findViewById(R.id.editTextDialogName);
+            btnCancel = dialog.findViewById(R.id.btnDialogCancel);
+            btnAdd = dialog.findViewById(R.id.btnDialogAdd);
+            btnFinish = dialog.findViewById(R.id.btnDialogFinish);
+            if (isNewPlayer) {
+                inputEditText.setText("");
+                dialog.setTitle("Add player");
+                dialog.setCancelable(true);
+            } else {
+                inputEditText.setText(players.get(findSelectedPlayer()).getName());
+                dialog.setTitle("Rename Player");
+                dialog.setCancelable(true);
+                btnFinish.setText("Save");
+                btnAdd.setVisibility(View.INVISIBLE);
+            }
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     players.add(new Player(inputEditText.getText().toString()));
                     recAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                     playerName(true);
-            }
-        });
-
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (newPlayer) {
-                    players.add(new Player(inputEditText.getText().toString()));
-                    recAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                } else {
-                    players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
-                    Log.i("Player " + findSelectedPlayer() + " changed to", inputEditText.getText().toString());
-                    recAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
                 }
-            }
-        });
-        dialog.show();
+            });
+            btnFinish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (newPlayer) {
+                        players.add(new Player(inputEditText.getText().toString()));
+                        recAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    } else {
+                        players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
+                        Log.i("Player " + findSelectedPlayer() + " changed to", inputEditText.getText().toString());
+                        recAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                }
+            });
+            dialog.show();
+        } else {
+            Toast.makeText(this, "Sorry, Max players is 4", Toast.LENGTH_SHORT).show();
+        }
     }
 
     int findSelectedPlayer() {
@@ -117,13 +122,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             case R.id.delete:
                 if (players.size() > 0) {
-                    for (int i = 0; i < players.size(); i++) {
-                        if (players.get(i).isSelected()) {
-                            players.remove(i);
-                            break;
-                        }
-                    }
+                    int s = findSelectedPlayer();
+                    players.remove(s);
                     recAdapter.notifyDataSetChanged();
+                    for (RoundScore r : scoreHistory) {
+                        r.clearScore(s);
+                    }
                 }
                 break;
             case R.id.deleteAll:
@@ -132,9 +136,25 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             case R.id.edit:
                 Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
-//                intent.putExtra("Players", players);
-
                 startActivity(intent);
+                break;
+            case R.id.clearScores:
+                scoreHistory.clear();
+                for (Player p : players) {
+                    p.resetScore();
+                }
+                recAdapter.notifyDataSetChanged();
+                break;
+            case R.id.deleteScore:
+                int p = 0;
+                int lastScoreAmount = 0;
+                if (players.size() > 0) {
+                    p = findSelectedPlayer();
+                    lastScoreAmount = scoreHistory.get(players.get(p).getTurns() - 1).getScore(p);
+                    players.get(p).deleteTurn(lastScoreAmount);
+                    recAdapter.notifyDataSetChanged();
+                }
+                scoreHistory.get(scoreHistory.size() -1).clearScore(p);
                 break;
             default:
                 Log.e("Menu","Invalid menu option");
@@ -146,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.get(playerTurn).addScore(moveString, turnScore);
         if (players.get(playerTurn).getTurns() > scoreHistory.size()) {
             scoreHistory.add(new RoundScore());
-
         }
         scoreHistory.get(players.get(playerTurn).getTurns() - 1).addScore(playerTurn, turnScore,moveString);
         players.get(playerTurn).setSelected(false);
@@ -188,7 +207,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // save
             case 7:
-                saveTurn();
+                if (turnScore > 0) {
+                    saveTurn();
+                }
                 break;
             // clear
             case 8:
@@ -262,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
         players.get(position).setSelected(true);
         recAdapter.notifyDataSetChanged();
+        playerTurn = position;
         return true;
     }
 }

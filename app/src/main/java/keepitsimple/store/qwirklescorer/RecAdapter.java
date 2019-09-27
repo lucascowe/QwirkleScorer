@@ -34,7 +34,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
             comment = itemView.findViewById(R.id.tvComment);
             data3 = itemView.findViewById(R.id.tvData3);
             data4 = itemView.findViewById(R.id.tvData4);
-            linearLayout = itemView.findViewById(R.id.linearLayout);
+            linearLayout = itemView.findViewById(R.id.rowLinearLayout);
 
 
             this.mRecListener = recListener;

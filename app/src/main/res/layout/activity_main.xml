@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/qbackground"
+    android:backgroundTint="#BBFFFFFF"
+    android:backgroundTintMode="src_atop"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -52,13 +54,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/gridLayout"
+        android:id="@+id/squareLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:weightSum="6"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayoutsave"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:targetApi="ice_cream_sandwich">
@@ -69,10 +71,10 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
-            android:background="@drawable/redstar"
+            android:background="#99333333"
             android:onClick="onClick"
-            android:tag="2"
 
+            android:tag="2"
             android:text="2"
             android:textColor="#FFFFFFFF"
             android:textSize="20sp" />
@@ -82,6 +84,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="3"
             android:text="3"
@@ -93,6 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="4"
             android:text="4"
@@ -104,6 +108,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="5"
             android:text="5"
@@ -115,6 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="9"
             android:text="DEL"
@@ -126,6 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="8"
             android:text="CLR"
@@ -135,7 +142,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/gridLayoutsave"
+        android:id="@+id/bottomLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginStart="8dp"
@@ -152,7 +159,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="4"
-            android:background="@drawable/qwirkle"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="6"
             android:text="QWIRKLE"
@@ -164,6 +171,7 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="2"
+            android:background="#99333333"
             android:onClick="onClick"
             android:tag="7"
             android:text="SAVE"
@@ -185,7 +193,7 @@
         android:text="TextView"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintBottom_toTopOf="@+id/squareLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />

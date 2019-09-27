@@ -4,5 +4,7 @@
     <item android:title="Rename Player" android:id="@+id/rename"></item>
     <item android:title="Delete Player" android:id="@+id/delete"></item>
     <item android:title="Delete All" android:id="@+id/deleteAll"></item>
-    <item android:title="Edit Scores" android:id="@+id/edit"></item>
+    <item android:title="Scores History" android:id="@+id/edit"></item>
+    <item android:title="Delete turn" android:id="@+id/deleteScore"></item>
+    <item android:title="Clear Scores" android:id="@+id/clearScores"></item>
 </menu>

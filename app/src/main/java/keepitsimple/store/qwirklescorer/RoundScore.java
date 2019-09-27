@@ -7,6 +7,9 @@ class RoundScore {
 
     RoundScore() {
         turn = new String[maxPlayers];
+        for (String s : turn) {
+            s = "";
+        }
         score = new int [maxPlayers];
     }
 
@@ -15,6 +18,11 @@ class RoundScore {
             this.turn[player] = turn;
             this.score[player] = score;
         }
+    }
+
+    void clearScore(int position) {
+        this.score[position] = 0;
+        this.turn[position] = "";
     }
 
     int getScore(int player) {
