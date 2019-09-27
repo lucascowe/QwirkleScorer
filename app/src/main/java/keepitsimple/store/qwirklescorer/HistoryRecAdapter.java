@@ -82,7 +82,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
                             String.valueOf(recyclerList.get(position).getTurn(i)));
         }
         if (position % 2 == 1) {
-            holder.linearLayout.setBackgroundColor(0xFF2196F3);
+            holder.linearLayout.setBackgroundColor(0x992196F3);
         } else {
             holder.linearLayout.setBackgroundColor(0);
         }
