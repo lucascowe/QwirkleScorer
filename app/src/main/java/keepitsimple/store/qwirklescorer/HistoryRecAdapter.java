@@ -78,7 +78,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         holder.turn.setText(Integer.toString(position+1));
         for (int i = 0; i < MainActivity.players.size(); i++) {
             holder.players[i].setText(
-                    String.valueOf(recyclerList.get(position).getTurn(i)) == null ? "" :
+                    String.valueOf(recyclerList.get(position).getTurn(i)) == "null" ? "" :
                             String.valueOf(recyclerList.get(position).getTurn(i)));
         }
         if (position % 2 == 1) {

@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/qbackground"
+    android:backgroundTint="#BBFFFFFF"
+    android:backgroundTintMode="src_atop"
     tools:context=".HistoryActivity">
 
     <TableLayout
@@ -26,52 +28,52 @@
                 android:id="@+id/totalTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="5"
                 android:gravity="center_horizontal"
                 android:text="Total"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_weight="5"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/score0TextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:gravity="center_horizontal"
                 android:text="Player 1"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_weight="10"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/score1TextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:gravity="center_horizontal"
                 android:text="Player 2"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_weight="10"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/score2TextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:gravity="center_horizontal"
                 android:text="Player 3"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_weight="10"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/score3TextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="10"
                 android:gravity="center_horizontal"
                 android:text="Player 4"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_weight="10"/>
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -87,12 +89,12 @@
                 android:id="@+id/turnTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="5"
                 android:gravity="center_horizontal"
                 android:text="Round"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_weight="5"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/player0TextView"
