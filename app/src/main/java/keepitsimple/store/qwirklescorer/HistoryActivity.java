@@ -21,14 +21,12 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-//        TextView player0TV = (TextView) findViewById(R.id.player0TextView);
-//        TextView score0TV = (TextView) findViewById(R.id.score0TextView);
-//        TextView counter = (TextView) view;
+
         TableRow playersTR = (TableRow) findViewById(R.id.headersTableRow);
         TableRow scoresTR = (TableRow) findViewById(R.id.scoresTableRow);
 
         for (int j=1; j<scoresTR.getChildCount();j++) {
-            TextView playerTV = (TextView) scoresTR.getChildAt(j);
+            TextView playerTV = (TextView) playersTR.getChildAt(j);
             playerTV.setText(MainActivity.players.get(j-1).getName());
         }
         for (int j=1; j<scoresTR.getChildCount();j++) {

@@ -19,7 +19,8 @@
             android:id="@+id/scoresTableRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black">
+            android:background="@android:color/black"
+            android:weightSum="45">
 
             <TextView
                 android:id="@+id/totalTextView"
@@ -141,7 +142,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#DD555555"
         android:textColor="@android:color/white"
