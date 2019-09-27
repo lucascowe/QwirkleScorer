@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -156,7 +157,17 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 }
                 scoreHistory.get(scoreHistory.size() -1).clearScore(p);
                 break;
+            case R.id.screenLock:
+                if (item.getTitle().equals("Disable Screen Lock")) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    item.setTitle("Enable Screen Lock");
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+                    item.setTitle("Disable Screen Lock");
+                }
+                break;
             default:
+
                 Log.e("Menu","Invalid menu option");
         }
         return true;

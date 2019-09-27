@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -25,14 +26,18 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
         TableRow playersTR = findViewById(R.id.headersTableRow);
         TableRow scoresTR = findViewById(R.id.scoresTableRow);
 
-        for (int jj = 1; jj < MainActivity.players.size(); jj++) {
+        for (int jj = 1; jj < scoresTR.getChildCount(); jj++) {
             TextView playerTV = (TextView) playersTR.getChildAt(jj);
             TextView scoreTV = (TextView) scoresTR.getChildAt(jj);
-            playerTV.setText(MainActivity.players.get(jj-1).getName());
-            scoreTV.setText(Integer.toString(MainActivity.players.get(jj-1).getTotalScore()));
+            if (jj <= MainActivity.players.size()) {
+                playerTV.setText(MainActivity.players.get(jj - 1).getName());
+                scoreTV.setText(Integer.toString(MainActivity.players.get(jj - 1).getTotalScore()));
+            } else {
+                playerTV.setVisibility(View.INVISIBLE);
+                scoreTV.setVisibility(View.INVISIBLE);
+            }
         }
-//        player0TV.setText(MainActivity.players.get(0).getName());
-//        score0TV.setText(Integer.toString(MainActivity.players.get(0).getTotalScore()));
+
         initRecycler();
 
     }

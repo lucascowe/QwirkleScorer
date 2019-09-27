@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -76,11 +75,29 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
         holder.turn.setText(Integer.toString(position+1));
-        for (int i = 0; i < MainActivity.players.size(); i++) {
+
+
+
+//        for (int i = 0; i < MainActivity.players.size(); i++) {
+//            holder.players[i].setText(
+//                    String.valueOf(recyclerList.get(position).getTurn(i)) == "null" ? "" :
+//                            String.valueOf(recyclerList.get(position).getTurn(i)));
+//        }
+
+        for (int i = 0; i <= 3; i++) {
             holder.players[i].setText(
                     String.valueOf(recyclerList.get(position).getTurn(i)) == "null" ? "" :
                             String.valueOf(recyclerList.get(position).getTurn(i)));
         }
+
+//        for (int j = MainActivity.players.size()+1; j < 4; j++) {
+//            holder.players[j].setText("");
+//            holder.players[j].setVisibility(View.INVISIBLE);
+//        }
+
+
+
+
         if (position % 2 == 1) {
             holder.linearLayout.setBackgroundColor(0x992196F3);
         } else {
