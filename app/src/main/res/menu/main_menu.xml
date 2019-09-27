@@ -3,8 +3,8 @@
     <item android:title="New Player" android:id="@+id/newPlayer"></item>
     <item android:title="Rename Player" android:id="@+id/rename"></item>
     <item android:title="Delete Player" android:id="@+id/delete"></item>
-    <item android:title="Delete All" android:id="@+id/deleteAll"></item>
+    <item android:title="Delete All Players" android:id="@+id/deleteAll"></item>
     <item android:title="Scores History" android:id="@+id/edit"></item>
-    <item android:title="Delete turn" android:id="@+id/deleteScore"></item>
-    <item android:title="Clear Scores" android:id="@+id/clearScores"></item>
+    <item android:title="Delete Turn" android:id="@+id/deleteScore"></item>
+    <item android:title="Clear All Scores" android:id="@+id/clearScores"></item>
 </menu>
