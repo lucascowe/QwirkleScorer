@@ -22,18 +22,15 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        TableRow playersTR = (TableRow) findViewById(R.id.headersTableRow);
-        TableRow scoresTR = (TableRow) findViewById(R.id.scoresTableRow);
+        TableRow playersTR = findViewById(R.id.headersTableRow);
+        TableRow scoresTR = findViewById(R.id.scoresTableRow);
 
-        for (int j=1; j<scoresTR.getChildCount();j++) {
-            TextView playerTV = (TextView) playersTR.getChildAt(j);
-            playerTV.setText(MainActivity.players.get(j-1).getName());
+        for (int jj = 1; jj < MainActivity.players.size(); jj++) {
+            TextView playerTV = (TextView) playersTR.getChildAt(jj);
+            TextView scoreTV = (TextView) scoresTR.getChildAt(jj);
+            playerTV.setText(MainActivity.players.get(jj-1).getName());
+            scoreTV.setText(Integer.toString(MainActivity.players.get(jj-1).getTotalScore()));
         }
-        for (int j=1; j<scoresTR.getChildCount();j++) {
-            TextView scoreTV = (TextView) scoresTR.getChildAt(j);
-            scoreTV.setText(Integer.toString(MainActivity.players.get(j-1).getTotalScore()));
-        }
-
 //        player0TV.setText(MainActivity.players.get(0).getName());
 //        score0TV.setText(Integer.toString(MainActivity.players.get(0).getTotalScore()));
         initRecycler();
