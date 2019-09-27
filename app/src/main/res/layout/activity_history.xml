@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/qbackground"
     tools:context=".HistoryActivity">
 
     <TableLayout
@@ -15,110 +16,136 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
-            android:id="@+id/headersTableRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/turnTextView"
-                android:layout_width="28dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Round"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/player0TextView"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Player 1"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/player1TextView"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Player 2"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/player2TextView"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Player 3"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/player3TextView"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Player 4"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow
             android:id="@+id/scoresTableRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black">
+            android:background="@android:color/black"
+            android:weightSum="45">
 
             <TextView
                 android:id="@+id/totalTextView"
-                android:layout_width="28dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Total"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="5"/>
 
             <TextView
                 android:id="@+id/score0TextView"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Player 1"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="10"/>
 
             <TextView
                 android:id="@+id/score1TextView"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Player 2"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="10"/>
 
             <TextView
                 android:id="@+id/score2TextView"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Player 3"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="10"/>
 
             <TextView
                 android:id="@+id/score3TextView"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Player 4"
                 android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_weight="10"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/headersTableRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DD555555"
+            android:textColor="@android:color/white"
+            android:weightSum="45">
+
+
+            <TextView
+                android:id="@+id/turnTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Round"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_weight="5"/>
+
+            <TextView
+                android:id="@+id/player0TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center_horizontal"
+                android:text="Player 1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player1TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center_horizontal"
+                android:text="Player 2"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player2TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center_horizontal"
+                android:text="Player 3"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/player3TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center_horizontal"
+                android:text="Player 4"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#DD555555"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

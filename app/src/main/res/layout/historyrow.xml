@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TableRow
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="45">
 
         <TextView
             android:id="@+id/turnTextView"
-            android:layout_width="28dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="XX" />
+            android:text="XX"
+            android:textColor="@android:color/white"
+            android:layout_weight="5"/>
 
         <TextView
             android:id="@+id/player0TextView"
-            android:layout_width="95dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Player 0" />
+            android:text="Player 0"
+            android:textColor="@android:color/white"
+            android:layout_weight="10"/>
 
         <TextView
             android:id="@+id/player1TextView"
-            android:layout_width="95dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Player 1" />
+            android:text="Player 1"
+            android:textColor="@android:color/white"
+            android:layout_weight="10"/>
 
         <TextView
             android:id="@+id/player2TextView"
-            android:layout_width="95dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Player 2" />
+            android:text="Player 2"
+            android:textColor="@android:color/white"
+            android:layout_weight="10"/>
 
         <TextView
             android:id="@+id/player3TextView"
-            android:layout_width="95dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Player 3" />
-    </TableRow>
-</RelativeLayout>
+            android:text="Player 3"
+            android:textColor="@android:color/white"
+            android:layout_weight="10"/>
+    </LinearLayout>
+</LinearLayout>
