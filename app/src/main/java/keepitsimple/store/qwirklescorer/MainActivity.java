@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     public void onClick (View view) {
+        boolean endGame = true;
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
         switch (num) {
@@ -207,7 +208,19 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 txvCurrentMove.setText(moveString);
                 break;
             case 6:
-                turnScore += 12;
+                if (endGame){
+                    turnScore += num;
+                    // if not first move, add +
+                    if (moveString.length() > 0) {
+                        moveString += " + " + (num);
+                    } else {
+                        moveString = String.valueOf(num);
+                    }
+                    txvCurrentMove.setText(moveString);
+                }
+                break;
+            case 12:
+                turnScore += num;
                 // if not first move, add +
                 if (moveString.length() > 0) {
                     moveString += " + QWIRKLE";

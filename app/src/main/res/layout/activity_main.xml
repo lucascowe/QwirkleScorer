@@ -152,12 +152,24 @@
             android:id="@+id/button5"
             android:layout_width="0dp"
             android:layout_height="64dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:onClick="onClick"
-            android:tag="6"
+            android:tag="12"
             android:text="QWIRKLE"
             android:textColor="#FFFFFFFF"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:tag="6"
+            android:text="LAST TILE PLAYED"
+            android:textColor="#FFFFFFFF"
+            android:textSize="8sp" />
 
         <Button
             android:id="@+id/button8"
