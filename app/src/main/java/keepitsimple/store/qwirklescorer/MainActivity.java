@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     TextView txvCurrentMove;
     RecyclerView recyclerView;
     RecAdapter recAdapter;
+    boolean endGame;
     static public ArrayList<Player> players;
     static public ArrayList<RoundScore> scoreHistory;
 
@@ -95,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             Toast.makeText(this, "Sorry, Max players is 4", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
 
     int findSelectedPlayer() {
         for (int i = 0; i < players.size(); i++) {
@@ -188,8 +196,33 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         txvCurrentMove.setText("");
     }
 
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    endGame = true;
+
+                    turnScore += 6;
+                    // if not first move, add +
+                    if (moveString.length() > 0) {
+                        moveString += " + " + String.valueOf(6);
+                    } else {
+                        moveString = String.valueOf(6);
+                    }
+                    txvCurrentMove.setText(moveString);
+
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    endGame = false;
+                    break;
+            }
+        }
+    };
+
     public void onClick (View view) {
-        boolean endGame = true;
+        endGame = false;
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
         switch (num) {
@@ -208,16 +241,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 txvCurrentMove.setText(moveString);
                 break;
             case 6:
-                if (endGame){
-                    turnScore += num;
-                    // if not first move, add +
-                    if (moveString.length() > 0) {
-                        moveString += " + " + (num);
-                    } else {
-                        moveString = String.valueOf(num);
-                    }
-                    txvCurrentMove.setText(moveString);
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("This means a player has played their last tile and the game is over, they will get a bonus 6 points.  Is this correct?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
                 break;
             case 12:
                 turnScore += num;
