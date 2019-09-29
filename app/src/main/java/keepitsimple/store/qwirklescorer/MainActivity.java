@@ -133,10 +133,17 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 if (players.size() > 0) {
                     int s = findSelectedPlayer();
                     players.remove(s);
-                    recAdapter.notifyDataSetChanged();
                     for (RoundScore r : scoreHistory) {
                         r.clearScore(s);
                     }
+                    if (s < players.size()) {
+                        players.get(s).setSelected(true);
+                    } else {
+                        s--;
+                        players.get(s).setSelected(true);
+                    }
+                    playerTurn = s;
+                    recAdapter.notifyDataSetChanged();
                 }
                 break;
             case R.id.deleteAll:
@@ -324,18 +331,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     @Override
     public void onRecClick(int position) {
-
+        players.get(findSelectedPlayer()).setSelected(false);
+        players.get(position).setSelected(true);
+        recAdapter.notifyDataSetChanged();
+        playerTurn = position;
     }
 
     @Override
     public boolean onRecLongClick(int position) {
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).setSelected(false);
-        }
-        players.get(position).setSelected(true);
-        recAdapter.notifyDataSetChanged();
-        playerTurn = position;
-        return true;
+        return false;
     }
 }
 
