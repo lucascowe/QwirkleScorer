@@ -202,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     endGame = true;
-
                     turnScore += 6;
                     // if not first move, add +
                     if (moveString.length() > 0) {
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                         moveString = String.valueOf(6);
                     }
                     txvCurrentMove.setText(moveString);
-
+                    saveTurn();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -240,11 +239,13 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 }
                 txvCurrentMove.setText(moveString);
                 break;
+            // Last Tile Played
             case 6:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("This means a player has played their last tile and the game is over, they will get a bonus 6 points.  Is this correct?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
                 break;
+            // Qwirkle
             case 12:
                 turnScore += num;
                 // if not first move, add +
