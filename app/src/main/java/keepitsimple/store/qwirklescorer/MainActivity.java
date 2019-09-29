@@ -212,26 +212,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
     }
 
-    DialogInterface.OnClickListener winnerDialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    endGame = false;
-                    scoreHistory.clear();
-                    for (Player p : players) {
-                        p.resetScore();
-                    }
-                    break;
-
-                case DialogInterface.BUTTON_NEGATIVE:
-                    finish();
-                    System.exit(0);
-                    break;
-            }
-        }
-    };
-
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -305,9 +285,13 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     for (Player p : players) {
                         p.resetScore();
                     }
+                    players.get(playerTurn).setSelected(false);
+                    playerTurn = 0;
+                    players.get(playerTurn).setSelected(true);
                     recAdapter.notifyDataSetChanged();
                     moveString = "";
                     turnScore = 0;
+
 
                 }
                 break;
@@ -374,7 +358,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.get(playerTurn).setSelected(true);
         scoreHistory = new ArrayList<>();
         initRecycler();
-//        playerName(true);
     }
 
     @Override
