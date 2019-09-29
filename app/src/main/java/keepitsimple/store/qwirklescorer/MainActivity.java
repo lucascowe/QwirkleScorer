@@ -100,10 +100,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
     }
 
-
-
-
-
     int findSelectedPlayer() {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).isSelected()) {
@@ -194,14 +190,47 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             scoreHistory.add(new RoundScore());
         }
         scoreHistory.get(players.get(playerTurn).getTurns() - 1).addScore(playerTurn, turnScore,moveString);
-        players.get(playerTurn).setSelected(false);
-        playerTurn = (playerTurn + 1) % players.size();
-        players.get(playerTurn).setSelected(true);
-        recAdapter.notifyDataSetChanged();
-        turnScore = 0;
-        moveString = "";
-        txvCurrentMove.setText("");
+        if (!endGame) {
+            players.get(playerTurn).setSelected(false);
+            playerTurn = (playerTurn + 1) % players.size();
+            players.get(playerTurn).setSelected(true);
+            recAdapter.notifyDataSetChanged();
+            turnScore = 0;
+            moveString = "";
+            txvCurrentMove.setText("");
+        } else {
+            recAdapter.notifyDataSetChanged();
+            TextView winnerTextView = (TextView) findViewById(R.id.winnerTextView);
+            Button qwirkleButton = (Button) findViewById(R.id.button5);
+            Button saveButton = (Button) findViewById(R.id.button8);
+            Button lastTileButton = (Button) findViewById(R.id.button4);
+            winnerTextView.setText(players.get(playerTurn).getName() + " Wins!!!!!");
+            winnerTextView.setVisibility(View.VISIBLE);
+            qwirkleButton.setText("Play Again");
+            saveButton.setText("Exit");
+            lastTileButton.setVisibility(View.INVISIBLE);
+        }
     }
+
+    DialogInterface.OnClickListener winnerDialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    endGame = false;
+                    scoreHistory.clear();
+                    for (Player p : players) {
+                        p.resetScore();
+                    }
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    finish();
+                    System.exit(0);
+                    break;
+            }
+        }
+    };
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
@@ -254,14 +283,33 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // Qwirkle
             case 12:
-                turnScore += num;
-                // if not first move, add +
-                if (moveString.length() > 0) {
-                    moveString += " + QWIRKLE";
+                Button qwirkleButton = (Button) findViewById(R.id.button5);
+                if(qwirkleButton.getText() == "QWIRKLE") {
+                    turnScore += num;
+                    // if not first move, add +
+                    if (moveString.length() > 0) {
+                        moveString += " + QWIRKLE";
+                    } else {
+                        moveString = "QWIRKLE";
+                    }
+                    txvCurrentMove.setText(moveString);
                 } else {
-                    moveString = "QWIRKLE";
+                    TextView winnerTextView = (TextView) findViewById(R.id.winnerTextView);
+                    Button saveButton = (Button) findViewById(R.id.button8);
+                    Button lastTileButton = (Button) findViewById(R.id.button4);
+                    winnerTextView.setVisibility(View.INVISIBLE);
+                    qwirkleButton.setText("QWIRKLE");
+                    saveButton.setText("SAVE");
+                    lastTileButton.setVisibility(View.VISIBLE);
+                    scoreHistory.clear();
+                    for (Player p : players) {
+                        p.resetScore();
+                    }
+                    recAdapter.notifyDataSetChanged();
+                    moveString = "";
+                    turnScore = 0;
+
                 }
-                txvCurrentMove.setText(moveString);
                 break;
             // save
             case 7:
@@ -326,15 +374,16 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.get(playerTurn).setSelected(true);
         scoreHistory = new ArrayList<>();
         initRecycler();
-        playerName(true);
+//        playerName(true);
     }
 
     @Override
-    public void onRecClick(int position) {
+    public boolean onRecClick(int position) {
         players.get(findSelectedPlayer()).setSelected(false);
         players.get(position).setSelected(true);
         recAdapter.notifyDataSetChanged();
         playerTurn = position;
+        return true;
     }
 
     @Override
