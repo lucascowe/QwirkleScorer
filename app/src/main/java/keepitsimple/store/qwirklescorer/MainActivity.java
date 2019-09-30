@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             // save
             case 7:
                 Button saveButton = (Button) findViewById(R.id.button8);
-                if (saveButton.getText() == "SAVE") {
+                if (saveButton.getText().toString() != "EXIT") {
                     if (turnScore > 0) {
                         saveTurn();
                     }

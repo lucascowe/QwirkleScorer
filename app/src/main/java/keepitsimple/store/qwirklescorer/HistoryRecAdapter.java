@@ -74,7 +74,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        holder.turn.setText(Integer.toString(position));
+        holder.turn.setText(Integer.toString(position + 1));
         for (int i = 0; i <= 3; i++) {
             holder.players[i].setText(
                     String.valueOf(recyclerList.get(position).getTurn(i)) == "null" ? "" :
