@@ -17,45 +17,50 @@
             android:id="@+id/turnTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="5"
             android:gravity="center_horizontal"
             android:text="XX"
             android:textColor="@android:color/white"
-            android:layout_weight="5"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/player0TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center_horizontal"
             android:text="Player 0"
             android:textColor="@android:color/white"
-            android:layout_weight="10"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/player1TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center_horizontal"
             android:text="Player 1"
             android:textColor="@android:color/white"
-            android:layout_weight="10"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/player2TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center_horizontal"
             android:text="Player 2"
             android:textColor="@android:color/white"
-            android:layout_weight="10"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/player3TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center_horizontal"
             android:text="Player 3"
             android:textColor="@android:color/white"
-            android:layout_weight="10"/>
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>
