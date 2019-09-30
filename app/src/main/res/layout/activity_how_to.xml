@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/qbackground"
+    tools:context=".HowToActivity">
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="21"
+        android:gravity="center_horizontal"
+        android:text="How To"
+        android:textColor="#FFFFFFFF"
+        android:background="#DD555555"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/instructionsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="16dp"
+        android:background="#DD555555"
+        android:gravity="start"
+        android:text="1. Using the menu options, delete that aren't required and change the player names if you wish, they should be in clockwise order.\n\n2. After drawing your tiles, who ever can play the most tiles plays 1st. Select that player on the screen and use the buttons to record scores.\n\n3 You'll notice the breakdown of the previous move under each players name.  You can look at previous players scores by going to the menu and selecting 'Scores History', these previous scores will be editable in a future version."
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

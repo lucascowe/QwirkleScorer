@@ -177,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     item.setTitle("Disable Screen Lock");
                 }
                 break;
+            case R.id.howTo:
+                Intent howToIntent = new Intent(getApplicationContext(),HowToActivity.class);
+                startActivity(howToIntent);
             default:
 
                 Log.e("Menu","Invalid menu option");
@@ -358,6 +361,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         players.get(playerTurn).setSelected(true);
         scoreHistory = new ArrayList<>();
         initRecycler();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onPause();
+        super.onBackPressed();
     }
 
     @Override
