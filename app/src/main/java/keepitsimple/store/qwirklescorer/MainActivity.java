@@ -212,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             qwirkleButton.setText("Play Again");
             saveButton.setText("Exit");
             lastTileButton.setVisibility(View.INVISIBLE);
+            endGame = true;
         }
     }
 
@@ -294,14 +295,21 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     recAdapter.notifyDataSetChanged();
                     moveString = "";
                     turnScore = 0;
+                    endGame = false;
 
 
                 }
                 break;
             // save
             case 7:
-                if (turnScore > 0) {
-                    saveTurn();
+                Button saveButton = (Button) findViewById(R.id.button8);
+                if (saveButton.getText() == "SAVE") {
+                    if (turnScore > 0) {
+                        saveTurn();
+                    }
+                } else {
+                    finish();
+                    System.exit(0);
                 }
                 break;
             // clear
