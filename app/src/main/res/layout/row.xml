@@ -30,9 +30,10 @@
         <TextView
             android:id="@+id/tvData3"
             android:layout_width="0dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="8dp"
+            android:textSize="20sp"
             android:textColor="#FFFFFFFF"
             android:layout_weight="8"
             tools:text="Data3" />
@@ -42,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:textSize="20sp"
             android:layout_weight="10"
             android:textColor="#FFFFFFFF"
             tools:text="Data4" />

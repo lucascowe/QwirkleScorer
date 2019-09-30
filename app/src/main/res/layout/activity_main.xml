@@ -71,67 +71,77 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:background="@android:color/black"
             android:onClick="onClick"
-
             android:tag="2"
             android:text="2"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/black"
             android:onClick="onClick"
             android:tag="3"
             android:text="3"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/black"
             android:onClick="onClick"
             android:tag="4"
             android:text="4"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/black"
             android:onClick="onClick"
             android:tag="5"
             android:text="5"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button9"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/black"
             android:onClick="onClick"
             android:tag="9"
             android:text="DEL"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button10"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/black"
             android:onClick="onClick"
             android:tag="8"
             android:text="CLR"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -154,10 +164,13 @@
             android:layout_height="64dp"
             android:layout_weight="3"
             android:onClick="onClick"
+            android:background="@android:color/black"
+            android:layout_marginTop="4dp"
+
             android:tag="12"
             android:text="QWIRKLE"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button4"
@@ -166,6 +179,9 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:onClick="onClick"
+            android:background="@android:color/black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             android:tag="6"
             android:text="LAST TILE PLAYED"
             android:textColor="#FFFFFFFF"
@@ -177,6 +193,9 @@
             android:layout_height="64dp"
             android:layout_weight="2"
             android:onClick="onClick"
+            android:background="@android:color/black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             android:tag="7"
             android:text="SAVE"
             android:textColor="#FFFFFFFF"
