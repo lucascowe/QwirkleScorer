@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     public void playerName(Boolean isNewPlayer) {
         if (!isNewPlayer || players.size() < 4) {
-            Button btnAdd, btnCancel, btnFinish;
+            final Button btnAdd, btnCancel, btnFinish;
             final Boolean newPlayer = isNewPlayer;
             final Dialog dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.add_player);
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 dialog.setTitle("Rename Player");
                 dialog.setCancelable(true);
                 btnFinish.setText("Save");
-                btnAdd.setVisibility(View.INVISIBLE);
+                btnAdd.setText("Delete");
             }
             btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,10 +72,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    players.add(new Player(inputEditText.getText().toString()));
-                    recAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                    playerName(true);
+                    if (btnAdd.getText().toString() == "Delete") {
+                        deletePlayer();
+                        dialog.dismiss();
+                    }else {
+                        players.add(new Player(inputEditText.getText().toString()));
+                        recAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        playerName(true);
+                    }
                 }
             });
             btnFinish.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +112,16 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
         return 0;
     }
+    public void addPlayer(View view){
+        playerName(true);
+        if (players.size() == 1) {
+            players.get(0).setSelected(true);
+        }
+    }
+    public void openHistory(View view){
+        Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -126,21 +140,22 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 }
                 break;
             case R.id.delete:
-                if (players.size() > 0) {
-                    int s = findSelectedPlayer();
-                    players.remove(s);
-                    for (RoundScore r : scoreHistory) {
-                        r.clearScore(s);
-                    }
-                    if (s < players.size()) {
-                        players.get(s).setSelected(true);
-                    } else {
-                        s--;
-                        players.get(s).setSelected(true);
-                    }
-                    playerTurn = s;
-                    recAdapter.notifyDataSetChanged();
-                }
+                deletePlayer();
+//                if (players.size() > 0) {
+//                    int s = findSelectedPlayer();
+//                    players.remove(s);
+//                    for (RoundScore r : scoreHistory) {
+//                        r.clearScore(s);
+//                    }
+//                    if (s < players.size()) {
+//                        players.get(s).setSelected(true);
+//                    } else {
+//                        s--;
+//                        players.get(s).setSelected(true);
+//                    }
+//                    playerTurn = s;
+//                    recAdapter.notifyDataSetChanged();
+//                }
                 break;
             case R.id.deleteAll:
                 players.clear();
@@ -186,7 +201,23 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
         return true;
     }
-
+    public void deletePlayer(){
+        if (players.size() > 0) {
+            int s = findSelectedPlayer();
+            players.remove(s);
+            for (RoundScore r : scoreHistory) {
+                r.clearScore(s);
+            }
+            if (s < players.size()) {
+                players.get(s).setSelected(true);
+            } else {
+                s--;
+                players.get(s).setSelected(true);
+            }
+            playerTurn = s;
+            recAdapter.notifyDataSetChanged();
+        }
+    }
     public void saveTurn() {
         players.get(playerTurn).addScore(moveString, turnScore);
         if (players.get(playerTurn).getTurns() > scoreHistory.size()) {
@@ -387,8 +418,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     @Override
-    public boolean onRecLongClick(int position) {
-        return false;
+    public void onRecLongClick(int position) {
+        players.get(findSelectedPlayer()).setSelected(false);
+        players.get(position).setSelected(true);
+        recAdapter.notifyDataSetChanged();
+        playerTurn = position;
+        playerName(false);
     }
 }
 

@@ -61,7 +61,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
     public interface RecListener {
         boolean onRecClick(int position);
-        boolean onRecLongClick(int position);
+        void onRecLongClick(int position);
     }
 
     @NonNull
