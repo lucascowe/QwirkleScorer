@@ -427,3 +427,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 }
 
+/*
+Todo:
+L 1. Save data
+A 2. Load Menu from button and change S to cog icon
+A 3. remove menu line (if it works)
+L 4. fix score reset bug
+L 5. Edit last score
+6. Edit score history
+7. Remove starting players
+8. Player X on add player
+A 9. sound / haptic feedback on button press
+ */
