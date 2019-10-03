@@ -223,13 +223,35 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             Button qwirkleButton = (Button) findViewById(R.id.button5);
             Button saveButton = (Button) findViewById(R.id.button8);
             Button lastTileButton = (Button) findViewById(R.id.button4);
-            winnerTextView.setText(players.get(playerTurn).getName() + " Wins!!!!!");
+            winnerTextView.setText(whoWins());
             winnerTextView.setVisibility(View.VISIBLE);
             qwirkleButton.setText("Play Again");
             saveButton.setText("Exit");
             lastTileButton.setVisibility(View.INVISIBLE);
             endGame = true;
         }
+    }
+
+    String whoWins() {
+        String winner = "";
+        int highestScore = 0;
+        int numberOfWinners = 0;
+        for (Player p : players) {
+            if (p.getTotalScore() > highestScore) {
+                highestScore = p.getTotalScore();
+                winner = p.getName();
+                numberOfWinners = 1;
+            } else if (p.getTotalScore() == highestScore) {
+                winner += " and " + p.getName();
+                numberOfWinners++;
+            }
+        }
+        if (numberOfWinners > 1) {
+            winner += " are the Winners!!";
+        } else {
+            winner += " Wins!!";
+        }
+        return winner;
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -250,14 +272,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
-                    endGame = false;
                     break;
             }
         }
     };
 
     public void onClick (View view) {
-        endGame = false;
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
         switch (num) {
@@ -285,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // Qwirkle
             case 12:
-                Button qwirkleButton = (Button) findViewById(R.id.button5);
+                Button qwirkleButton = findViewById(R.id.button5);
                 if(!endGame) {
                     turnScore += num;
                     // if not first move, add +
@@ -296,9 +316,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     }
                     txvCurrentMove.setText(moveString);
                 } else {
-                    TextView winnerTextView = (TextView) findViewById(R.id.winnerTextView);
-                    Button saveButton = (Button) findViewById(R.id.button8);
-                    Button lastTileButton = (Button) findViewById(R.id.button4);
+                    TextView winnerTextView = findViewById(R.id.winnerTextView);
+                    Button saveButton = findViewById(R.id.button8);
+                    Button lastTileButton = findViewById(R.id.button4);
                     winnerTextView.setVisibility(View.INVISIBLE);
                     qwirkleButton.setText("QWIRKLE");
                     saveButton.setText("SAVE");
