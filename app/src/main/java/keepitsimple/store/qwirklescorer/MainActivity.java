@@ -141,21 +141,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             case R.id.delete:
                 deletePlayer();
-//                if (players.size() > 0) {
-//                    int s = findSelectedPlayer();
-//                    players.remove(s);
-//                    for (RoundScore r : scoreHistory) {
-//                        r.clearScore(s);
-//                    }
-//                    if (s < players.size()) {
-//                        players.get(s).setSelected(true);
-//                    } else {
-//                        s--;
-//                        players.get(s).setSelected(true);
-//                    }
-//                    playerTurn = s;
-//                    recAdapter.notifyDataSetChanged();
-//                }
                 break;
             case R.id.deleteAll:
                 players.clear();
@@ -293,13 +278,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             // Last Tile Played
             case 6:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("This means a player has played their last tile and the game is over, they will get a bonus 6 points.  Is this correct?").setPositiveButton("Yes", dialogClickListener)
+                builder.setMessage("This means a player has played their last tile and the game " +
+                        "is over, they will get a bonus 6 points.  Is this correct?")
+                        .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
                 break;
             // Qwirkle
             case 12:
                 Button qwirkleButton = (Button) findViewById(R.id.button5);
-                if(qwirkleButton.getText() == "QWIRKLE") {
+                if(!endGame) {
                     turnScore += num;
                     // if not first move, add +
                     if (moveString.length() > 0) {
@@ -327,14 +314,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     moveString = "";
                     turnScore = 0;
                     endGame = false;
-
-
                 }
                 break;
             // save
             case 7:
-                Button saveButton = (Button) findViewById(R.id.button8);
-                if (saveButton.getText().toString() != "EXIT") {
+                Button saveButton = findViewById(R.id.button8);
+                if (!endGame) {
                     if (turnScore > 0) {
                         saveTurn();
                     }
@@ -432,10 +417,11 @@ Todo:
 L 1. Save data
 A 2. Load Menu from button and change S to cog icon
 A 3. remove menu line (if it works)
-L 4. fix score reset bug
+FIXED L 4. fix score reset bug
 L 5. Edit last score
 6. Edit score history
 7. Remove starting players
 8. Player X on add player
 A 9. sound / haptic feedback on button press
+L 10. Winning player message logic
  */
