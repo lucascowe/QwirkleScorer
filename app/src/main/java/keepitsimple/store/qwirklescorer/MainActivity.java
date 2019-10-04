@@ -5,19 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     boolean endGame;
     static public ArrayList<Player> players;
     static public ArrayList<RoundScore> scoreHistory;
+    MediaPlayer MP;
+    Vibrator vibrator;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             btnAdd = dialog.findViewById(R.id.btnDialogAdd);
             btnFinish = dialog.findViewById(R.id.btnDialogFinish);
             if (isNewPlayer) {
-                inputEditText.setText("");
+                inputEditText.setText("Player " + Integer.toString(players.size()+1));
                 dialog.setTitle("Add player");
+
                 dialog.setCancelable(true);
             } else {
                 inputEditText.setText(players.get(findSelectedPlayer()).getName());
@@ -80,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                         recAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                         playerName(true);
+                        players.get(playerTurn).setSelected(true);
                     }
                 }
             });
@@ -123,69 +134,99 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
+    public void openMenu(View view) {
+        Button settingsButton = (Button) findViewById(R.id.settingsButton);
+        PopupMenu popupMenu = new PopupMenu(MainActivity.this, settingsButton);
+        popupMenu.getMenuInflater().inflate(R.menu.main_menu, popupMenu.getMenu());
 
-        switch (item.getItemId()) {
-            case R.id.newPlayer:
-                playerName(true);
-                if (players.size() == 1) {
-                    players.get(0).setSelected(true);
-                }
-                break;
-            case R.id.rename:
-                if (players.size() > 0) {
-                    playerName(false);
-                }
-                break;
-            case R.id.delete:
-                deletePlayer();
-                break;
-            case R.id.deleteAll:
-                players.clear();
-                recAdapter.notifyDataSetChanged();
-                break;
-            case R.id.edit:
-                Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.clearScores:
-                scoreHistory.clear();
-                for (Player p : players) {
-                    p.resetScore();
-                }
-                recAdapter.notifyDataSetChanged();
-                break;
-            case R.id.deleteScore:
-                int p = 0;
-                int lastScoreAmount = 0;
-                if (players.size() > 0) {
-                    p = findSelectedPlayer();
-                    lastScoreAmount = scoreHistory.get(players.get(p).getTurns() - 1).getScore(p);
-                    players.get(p).deleteTurn(lastScoreAmount);
-                    recAdapter.notifyDataSetChanged();
-                }
-                scoreHistory.get(scoreHistory.size() -1).clearScore(p);
-                break;
-            case R.id.screenLock:
-                if (item.getTitle().equals("Disable Screen Lock")) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    item.setTitle("Enable Screen Lock");
-                } else {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-                    item.setTitle("Disable Screen Lock");
-                }
-                break;
-            case R.id.howTo:
-                Intent howToIntent = new Intent(getApplicationContext(),HowToActivity.class);
-                startActivity(howToIntent);
-            default:
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
 
-                Log.e("Menu","Invalid menu option");
-        }
-        return true;
+                    case R.id.clearScores:
+                        scoreHistory.clear();
+                        for (Player p : players) {
+                            p.resetScore();
+                        }
+                        recAdapter.notifyDataSetChanged();
+                        break;
+                    case R.id.deleteScore:
+                        int p = 0;
+                        int lastScoreAmount = 0;
+                        if (players.size() > 0) {
+                            p = findSelectedPlayer();
+                            lastScoreAmount = scoreHistory.get(players.get(p).getTurns() - 1).getScore(p);
+                            players.get(p).deleteTurn(lastScoreAmount);
+                            recAdapter.notifyDataSetChanged();
+                        }
+                        scoreHistory.get(scoreHistory.size() -1).clearScore(p);
+                        break;
+                    case R.id.screenLock:
+                        if (item.getTitle().equals("Disable Screen Lock")) {
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                            item.setTitle("Enable Screen Lock");
+                        } else {
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+                            item.setTitle("Disable Screen Lock");
+                        }
+                        break;
+                    case R.id.howTo:
+                        Intent howToIntent = new Intent(getApplicationContext(),HowToActivity.class);
+                        startActivity(howToIntent);
+                    default:
+
+                        Log.e("Menu","Invalid menu option");
+                }
+                return true;
+            }
+        });
+        popupMenu.show();
     }
+
+
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        super.onOptionsItemSelected(item);
+//
+//        switch (item.getItemId()) {
+//
+//            case R.id.clearScores:
+//                scoreHistory.clear();
+//                for (Player p : players) {
+//                    p.resetScore();
+//                }
+//                recAdapter.notifyDataSetChanged();
+//                break;
+//            case R.id.deleteScore:
+//                int p = 0;
+//                int lastScoreAmount = 0;
+//                if (players.size() > 0) {
+//                    p = findSelectedPlayer();
+//                    lastScoreAmount = scoreHistory.get(players.get(p).getTurns() - 1).getScore(p);
+//                    players.get(p).deleteTurn(lastScoreAmount);
+//                    recAdapter.notifyDataSetChanged();
+//                }
+//                scoreHistory.get(scoreHistory.size() -1).clearScore(p);
+//                break;
+//            case R.id.screenLock:
+//                if (item.getTitle().equals("Disable Screen Lock")) {
+//                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//                    item.setTitle("Enable Screen Lock");
+//                } else {
+//                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+//                    item.setTitle("Disable Screen Lock");
+//                }
+//                break;
+//            case R.id.howTo:
+//                Intent howToIntent = new Intent(getApplicationContext(),HowToActivity.class);
+//                startActivity(howToIntent);
+//            default:
+//
+//                Log.e("Menu","Invalid menu option");
+//        }
+//        return true;
+//    }
     public void deletePlayer(){
         if (players.size() > 0) {
             int s = findSelectedPlayer();
@@ -269,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     }
                     txvCurrentMove.setText(moveString);
                     saveTurn();
+                    vibrator.vibrate(2000);
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -280,12 +322,16 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     public void onClick (View view) {
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
+        MP = MediaPlayer.create(this,R.raw.buttonpress);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         switch (num) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
+                MP.start();
+                vibrator.vibrate(50);
                 turnScore += num;
                 // if not first move, add +
                 if (moveString.length() > 0) {
@@ -307,6 +353,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             case 12:
                 Button qwirkleButton = findViewById(R.id.button5);
                 if(!endGame) {
+                    MP.start();
+                    vibrator.vibrate(50);
                     turnScore += num;
                     // if not first move, add +
                     if (moveString.length() > 0) {
@@ -341,6 +389,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 Button saveButton = findViewById(R.id.button8);
                 if (!endGame) {
                     if (turnScore > 0) {
+                        MP.start();
+                        vibrator.vibrate(50);
                         saveTurn();
                     }
                 } else {
@@ -352,9 +402,11 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             case 8:
                 moveString = "";
                 turnScore = 0;
+                vibrator.vibrate(50);
                 break;
             // delete
             case 9:
+                vibrator.vibrate(50);
                 String[] turns = moveString.split(" ",48);
                 moveString = "";
                 turnScore = 0;
@@ -397,14 +449,15 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         txvCurrentMove.setText("");
 
         players = new ArrayList<>();
-        players.add(new Player("Player 1"));
-        players.add(new Player("Player 2"));
-        players.add(new Player("Player 3"));
-        players.add(new Player("Player 4"));
-        playerTurn = 0;
-        players.get(playerTurn).setSelected(true);
+//        players.add(new Player("Player 1"));
+//        players.add(new Player("Player 2"));
+//        players.add(new Player("Player 3"));
+//        players.add(new Player("Player 4"));
+//        playerTurn = 0;
+//        players.get(playerTurn).setSelected(true);
         scoreHistory = new ArrayList<>();
         initRecycler();
+        playerName(true);
     }
 
     @Override
@@ -435,13 +488,14 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 /*
 Todo:
 L 1. Save data
-A 2. Load Menu from button and change S to cog icon
-A 3. remove menu line (if it works)
+A 2. Load Menu from button and change S to cog icon - Done but still need cog icon
+A 3. remove menu line (if it works) - Done
 FIXED L 4. fix score reset bug
 L 5. Edit last score
 6. Edit score history
-7. Remove starting players
-8. Player X on add player
-A 9. sound / haptic feedback on button press
+A 7. Remove starting players - Done
+A 8. Player X on add player - Done
+A 9. sound / haptic feedback on button press - Done
 L 10. Winning player message logic
+
  */
