@@ -1,5 +1,6 @@
 package keepitsimple.store.qwirklescorer;
 
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,15 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
+
 
 public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
-    private ArrayList<RoundScore> recyclerList;
+    private Cursor sCursor;
     private RecListener recListener;
 
-    HistoryRecAdapter(ArrayList<RoundScore> list, RecListener listener) {
-        this.recyclerList = list;
+    HistoryRecAdapter(Cursor scoreCursor, RecListener listener) {
+        this.sCursor = scoreCursor;
         this.recListener = listener;
     }
 
@@ -74,11 +77,15 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        holder.turn.setText(Integer.toString(position + 1));
-        for (int i = 0; i <= 3; i++) {
-            holder.players[i].setText(
-                    String.valueOf(recyclerList.get(position).getTurn(i)) == "null" ? "" :
-                            String.valueOf(recyclerList.get(position).getTurn(i)));
+        position++;
+        if (!sCursor.moveToPosition(position)) {
+            return;
+        }
+        String text;
+        holder.turn.setText(Integer.toString(position));
+        for (int ii = 0; ii < MainActivity.recAdapter.getItemCount(); ii++) {
+            text = sCursor.getString(sCursor.getColumnIndex(ScoreHistory.COLUMN_TURN[ii]));
+            holder.players[ii].setText(text);
         }
         if (position % 2 == 1) {
             holder.linearLayout.setBackgroundColor(0x992196F3);
@@ -89,9 +96,17 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return recyclerList.size();
+        return sCursor.getCount();
     }
 
-
+    void updateCursor(Cursor newCursor) {
+        if (sCursor != null) {
+            sCursor.close();
+        }
+        sCursor = newCursor;
+        if (newCursor != null) {
+            notifyDataSetChanged();
+        }
+    }
 }
 

@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static keepitsimple.store.qwirklescorer.MainActivity.recAdapter;
+
 public class HistoryActivity extends AppCompatActivity implements HistoryRecAdapter.RecListener {
     RecyclerView recyclerView;
-    HistoryRecAdapter historyRecAdapter;
+    static HistoryRecAdapter historyRecAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,9 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
         for (int jj = 1; jj < scoresTR.getChildCount(); jj++) {
             TextView playerTV = (TextView) playersTR.getChildAt(jj);
             TextView scoreTV = (TextView) scoresTR.getChildAt(jj);
-            if (jj <= MainActivity.players.size()) {
-                playerTV.setText(MainActivity.players.get(jj - 1).getName());
-                scoreTV.setText(Integer.toString(MainActivity.players.get(jj - 1).getTotalScore()));
+            if (jj <= recAdapter.getItemCount()) {
+                playerTV.setText(recAdapter.getPlayerName(jj));
+                scoreTV.setText(String.valueOf(recAdapter.getPlayerScore(jj)));
             } else {
                 playerTV.setVisibility(View.INVISIBLE);
                 scoreTV.setVisibility(View.INVISIBLE);
@@ -45,7 +47,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
     public void initRecycler() {
         // link Adapter to
         recyclerView = findViewById(R.id.historyRecyclerView);
-        historyRecAdapter = new HistoryRecAdapter(MainActivity.scoreHistory, this);
+        historyRecAdapter = new HistoryRecAdapter(MainActivity.mCursorScores, this);
 
         // Set up Recycler manager to link to adapter
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());

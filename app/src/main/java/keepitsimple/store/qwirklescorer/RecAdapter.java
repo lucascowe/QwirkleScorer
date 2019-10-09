@@ -1,5 +1,7 @@
 package keepitsimple.store.qwirklescorer;
 
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +13,15 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
+
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
-    private ArrayList<Player> recyclerList;
+    private Cursor mCursor;
     private RecListener recListener;
 
-    RecAdapter(ArrayList<Player> list, RecListener listener) {
-        this.recyclerList = list;
+    RecAdapter(Cursor list, RecListener listener) {
+        this.mCursor = list;
         this.recListener = listener;
     }
 
@@ -73,19 +77,94 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
-        holder.header.setText(recyclerList.get(position).getName());
-        holder.comment.setText(recyclerList.get(position).getTurn());
-        holder.data3.setText(String.valueOf(recyclerList.get(position).getTurns()));
-        holder.data4.setText(String.valueOf(recyclerList.get(position).getTotalScore()));
-        if (recyclerList.get(position).isSelected()) {
+        // check table row exists
+        if (!mCursor.moveToPosition(position)) {
+            return;
+        }
+        String text = mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME));
+        holder.header.setText(text);
+        Log.i("Recycler name","the name " + text);
+        text = mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN));
+        holder.comment.setText(text);
+        text = "" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS));
+        holder.data3.setText(text);
+        text = "" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE));
+        holder.data4.setText(text);
+        if (1 == mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED))) {
             holder.linearLayout.setBackgroundColor(0xAA2196F3);
         } else {
             holder.linearLayout.setBackgroundColor(0x66111111);
         }
     }
 
+    int logPlayerTableContents() {
+
+        if (!mCursor.moveToFirst()) {
+            return Returns.FAIL;
+        }
+        do {
+            Log.i("Players Table:",mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
+                    ". " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)) + " " +
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN)) + " # turns:" +
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS)) + " score: " +
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)) + " Selected: " +
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED)));
+        } while (mCursor.moveToNext());
+        return Returns.SUCCESS;
+    }
+
     @Override
     public int getItemCount() {
-        return recyclerList.size();
+        try {
+            return mCursor.getCount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    void updateCursor(Cursor newCursor) {
+        if (mCursor != null) {
+            mCursor.close();
+        }
+        mCursor = newCursor;
+        if (newCursor != null) {
+             notifyDataSetChanged();
+        }
+    }
+
+    int getPlayerNumber(int p) {
+        if (mCursor.moveToPosition(p)) {
+            return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER));
+        }
+        return Returns.FAIL;
+    }
+
+    int getPlayerTurnNumber(int p) {
+        if (mCursor.moveToPosition(p)) {
+            return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS));
+        }
+        return Returns.FAIL;
+    }
+
+    int getPlayerScore(int p) {
+        if (mCursor.moveToPosition(p)) {
+            return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE));
+        }
+        return Returns.FAIL;
+    }
+
+    String getPlayerName(int p) {
+        if (mCursor.moveToPosition(p)) {
+            return mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME));
+        }
+        return "";
+    }
+
+    String getPlayerTurn(int p) {
+        if (mCursor.moveToPosition(p)) {
+            return mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN));
+        }
+        return "";
     }
 }
