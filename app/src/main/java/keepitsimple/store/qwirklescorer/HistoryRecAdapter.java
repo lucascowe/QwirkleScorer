@@ -79,14 +79,13 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-//        position++;
         if (!sCursor.moveToPosition(position)) {
             Log.i("history",position + " no row found");
             return;
         }
         String text;
         String msg;
-        holder.turn.setText(Integer.toString(position));
+        holder.turn.setText(Integer.toString(position + 1));
         for (int ii = 0; ii < 4; ii++) {
             if (ii < recAdapter.getItemCount()) {
                 mCursorPlayers.moveToPosition(ii);
