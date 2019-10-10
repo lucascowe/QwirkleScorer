@@ -136,16 +136,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             public boolean onMenuItemClick(MenuItem item) {
                 ContentValues cv;
                 switch (item.getItemId()) {
-
-                    case R.id.clearScores:
-                        cv = new ContentValues();
-                        cv.put(PlayersTable.COLUMN_TURNS, 0);
-                        cv.put(PlayersTable.COLUMN_TURN,"");
-                        cv.put(PlayersTable.COLUMN_SCORE, 0);
-                        mDatabase.update(PlayersTable.TABLE_NAME,cv,null,null);
-                        mDatabase.delete(ScoreHistory.TABLE_NAME,null,null);
-                        recAdapter.updateCursor(refreshScoreCursor());
-                        break;
                     case R.id.deleteScore:
                         int p = getSelected();
                         cv = new ContentValues();
@@ -165,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                                 "=" + recAdapter.getPlayerTurnNumber(p),null);
                         recAdapter.updateCursor(refreshPlayerCursor());
                         historyRecAdapter.updateCursor(refreshScoreCursor());
-
+                        break;
+                    case R.id.newGame:
+                        newGame();
                         break;
                     case R.id.screenLock:
                         if (item.getTitle().equals("Disable Screen Lock")) {
@@ -191,18 +183,48 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     void deletePlayer(){
         int selected = getSelected();
+        // remove player from player table
         mDatabase.delete(PlayersTable.TABLE_NAME,PlayersTable.COLUMN_LOCATION + "=" + selected,null);
         recAdapter.updateCursor(refreshPlayerCursor());
+        // move to next players turn
         if (recAdapter.getItemCount() > 0) {
             playerTurn = selected % recAdapter.getItemCount();
             selectPlayer(playerTurn);
         }
+        // remove players turn history
         ContentValues cv = new ContentValues();
-        cv.put(ScoreHistory.COLUMN_SCORE[playerTurn],0);
-        cv.put(ScoreHistory.COLUMN_TURN[playerTurn],"");
+        cv.put(ScoreHistory.COLUMN_SCORE[recAdapter.getPlayerNumber(getSelected())],0);
+        cv.put(ScoreHistory.COLUMN_TURN[recAdapter.getPlayerNumber(getSelected())],"");
         mDatabase.update(ScoreHistory.TABLE_NAME,cv,null,null);
+        // update player locations
+        Cursor c = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME +
+                " WHERE " + PlayersTable.COLUMN_LOCATION + " > " + selected +
+                " ORDER BY "+ PlayersTable.COLUMN_LOCATION + " ASC", null);
+        if (c.moveToFirst()) {
+            for (int ii = 0; ii < c.getCount(); ii++) {
+                int loc = c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION));
+                cv.clear();
+                cv.put(PlayersTable.COLUMN_LOCATION, loc - 1);
+                mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_LOCATION +
+                        "=" + loc,null);
+            }
+        }
+        recAdapter.updateCursor(refreshPlayerCursor());
+        if (recAdapter.getItemCount() == 0) newGame();
+        refreshScoreCursor();
+    }
+
+    void newGame() {
+        ContentValues cv = new ContentValues();
+        cv.put(PlayersTable.COLUMN_TURNS, 0);
+        cv.put(PlayersTable.COLUMN_TURN,"");
+        cv.put(PlayersTable.COLUMN_SCORE, 0);
+        mDatabase.update(PlayersTable.TABLE_NAME,cv,null,null);
+        mDatabase.delete(ScoreHistory.TABLE_NAME,null,null);
         recAdapter.updateCursor(refreshPlayerCursor());
         refreshScoreCursor();
+        Log.i("newGame","player scores cleared");
+//        recAdapter.logPlayerTableContents();
     }
 
     int getLastScore(int position) {
@@ -219,21 +241,21 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         cv.put(PlayersTable.COLUMN_TURN, moveString);
         cv.put(PlayersTable.COLUMN_SCORE, recAdapter.getPlayerScore(getSelected()) + turnScore);
         cv.put(PlayersTable.COLUMN_TURNS, selectedPlayerTurn);
-        mDatabase.update(PlayersTable.TABLE_NAME,cv,PlayersTable.COLUMN_NUMBER + "=" +
+        mDatabase.update(PlayersTable.TABLE_NAME,cv,PlayersTable.COLUMN_LOCATION + "=" +
                 getSelected(),null);
         Cursor c = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME +
                 " WHERE " + ScoreHistory.COLUMN_ROUND + "=" + selectedPlayerTurn, null);
         if (c.moveToFirst()) {
             cv.clear();
-            cv.put(ScoreHistory.COLUMN_SCORE[getSelected()], turnScore);
-            cv.put(ScoreHistory.COLUMN_TURN[getSelected()], moveString);
+            cv.put(ScoreHistory.COLUMN_SCORE[recAdapter.getPlayerNumber(getSelected())], turnScore);
+            cv.put(ScoreHistory.COLUMN_TURN[recAdapter.getPlayerNumber(getSelected())], moveString);
             mDatabase.update(ScoreHistory.TABLE_NAME,cv,ScoreHistory.COLUMN_ROUND + "=" +
                     selectedPlayerTurn,null);
         } else {
             cv.clear();
             cv.put(ScoreHistory.COLUMN_ROUND, selectedPlayerTurn);
-            cv.put(ScoreHistory.COLUMN_SCORE[getSelected()], turnScore);
-            cv.put(ScoreHistory.COLUMN_TURN[getSelected()], moveString);
+            cv.put(ScoreHistory.COLUMN_SCORE[recAdapter.getPlayerNumber(getSelected())], turnScore);
+            cv.put(ScoreHistory.COLUMN_TURN[recAdapter.getPlayerNumber(getSelected())], moveString);
             mDatabase.insert(ScoreHistory.TABLE_NAME,null,cv);
         }
         if (!endGame) {
@@ -312,8 +334,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         switch (num) {
             case 2:
-                dbHelp.reset(mDatabase);
-                recAdapter.updateCursor(refreshPlayerCursor());
+//                dbHelp.reset(mDatabase);
+//                recAdapter.updateCursor(refreshPlayerCursor());
             case 3:
             case 4:
             case 5:
@@ -358,13 +380,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     qwirkleButton.setText("QWIRKLE");
                     saveButton.setText("SAVE");
                     lastTileButton.setVisibility(View.VISIBLE);
-//                    scoreHistory.clear();
-//                    for (Player p : players) {
-//                        p.resetScore();
-//                    }
-//                    players.get(playerTurn).setSelected(false);
-//                    playerTurn = 0;
-//                    players.get(playerTurn).setSelected(true);
                     recAdapter.notifyDataSetChanged();
                     moveString = "";
                     turnScore = 0;
@@ -436,7 +451,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
         dbHelp = new DbHelp(this);
         mDatabase = dbHelp.getWritableDatabase();
-        dbHelp.reset(mDatabase);
         mCursorPlayers = refreshPlayerCursor();
         mCursorScores = refreshScoreCursor();
 
@@ -445,7 +459,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     Cursor refreshPlayerCursor() {
-        mCursorPlayers = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME, null);
+        mCursorPlayers = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME +
+                " ORDER BY " + PlayersTable.COLUMN_LOCATION + " ASC", null);
         return mCursorPlayers;
     }
 
@@ -468,18 +483,38 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         return true;
     }
 
+    int getAvailablePlayerNumber() {
+        int ii;
+        Log.i("Available","getting player number");
+        Cursor c = mDatabase.rawQuery("SELECT " + PlayersTable.COLUMN_NUMBER +
+                " FROM " + PlayersTable.TABLE_NAME + " ORDER BY " + PlayersTable.COLUMN_NUMBER +
+                " ASC", null);
+        if (!c.moveToFirst()) return 0;
+        for (ii = 0; ii < 4; ii++) {
+            if (c.getInt(c.getColumnIndex(PlayersTable.COLUMN_NUMBER)) != ii) {
+                Log.i("Available player number","Found " + ii);
+                return ii;
+            } else {
+                if (!c.moveToNext()) {
+                    return (ii + 1);
+                }
+            }
+        }
+        Log.i("Available player number","Last resort " + ii);
+        return ii;
+    }
+
     void addPlayer(String name) {
         recAdapter.logPlayerTableContents();
         ContentValues cv = new ContentValues();
-        cv.put(PlayersTable.COLUMN_NUMBER, recAdapter.getItemCount());
+        cv.put(PlayersTable.COLUMN_NUMBER, getAvailablePlayerNumber());
+        cv.put(PlayersTable.COLUMN_LOCATION, recAdapter.getItemCount());
         cv.put(PlayersTable.COLUMN_NAME, name);
         cv.put(PlayersTable.COLUMN_TURN, "");
         cv.put(PlayersTable.COLUMN_TURNS, 0);
         cv.put(PlayersTable.COLUMN_SCORE, 0);
-        cv.put(PlayersTable.COLUMN_SELECTED, 0);
+        cv.put(PlayersTable.COLUMN_SELECTED, recAdapter.getItemCount() == 0 ? 1 : 0);
         mDatabase.insert(PlayersTable.TABLE_NAME,null, cv);
-
-
         recAdapter.updateCursor(refreshPlayerCursor());
         recAdapter.logPlayerTableContents();
     }
@@ -490,9 +525,11 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     void selectPlayer(int position) {
-        Log.i("Debug","selecting player " + position);
+        Log.i("Debug","selecting player in position " + position);
+        // clear selection
         mDatabase.execSQL("UPDATE " + PlayersTable.TABLE_NAME + " SET " + PlayersTable.COLUMN_SELECTED +
                 "=0 WHERE " + PlayersTable.COLUMN_SELECTED + "=1");
+        // set new selection
         mDatabase.execSQL("UPDATE " + PlayersTable.TABLE_NAME + " SET " + PlayersTable.COLUMN_SELECTED +
                 "=1 WHERE " + PlayersTable.COLUMN_NUMBER + "=" + recAdapter.getPlayerNumber(position));
     }
@@ -501,9 +538,11 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         Cursor c = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME +
                 " WHERE " + PlayersTable.COLUMN_SELECTED + "=1", null);
         if (c.moveToFirst()) {
+            Log.i("Selected","Player found in location " +
+                    c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION)));
             return c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION));
         } else {
-            Log.e("PlayerTable","Could not find selected player, default to 0");
+            Log.i("Error","Could not find selected player, default to 0");
             return 0;
         }
     }
@@ -539,5 +578,7 @@ A 7. Remove starting players - Done
 A 8. Player X on add player - Done
 A 9. sound / haptic feedback on button press - Done
 L 10. Winning player message logic
+
+// TODO: Add random select for who starts?
 
  */

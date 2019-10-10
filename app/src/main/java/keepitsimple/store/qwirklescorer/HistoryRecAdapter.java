@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
+import static keepitsimple.store.qwirklescorer.MainActivity.*;
 
 
 public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
@@ -84,15 +85,19 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
             return;
         }
         String text;
+        String msg;
         holder.turn.setText(Integer.toString(position));
         for (int ii = 0; ii < 4; ii++) {
-            if (ii < MainActivity.recAdapter.getItemCount()) {
-                text = sCursor.getString(sCursor.getColumnIndex(ScoreHistory.COLUMN_TURN[ii]));
-
+            if (ii < recAdapter.getItemCount()) {
+                mCursorPlayers.moveToPosition(ii);
+                int playerNum = mCursorPlayers.getInt(mCursorPlayers.getColumnIndex(PlayersTable.COLUMN_NUMBER));
+                text = sCursor.getString(sCursor.getColumnIndex(ScoreHistory.COLUMN_TURN[playerNum]));
+                msg = "matched player number " + playerNum;
             } else {
+                msg = "no match found " + ii + " < " + recAdapter.getItemCount();
                 text = "";
             }
-            Log.i("history", "row: " + position + " player " + ii + "text: " + text);
+            Log.i("history", "row: " + position + " loc: " + ii + " text: " + text + " msg: " + msg);
             holder.players[ii].setText(text);
         }
         if (position % 2 == 1) {

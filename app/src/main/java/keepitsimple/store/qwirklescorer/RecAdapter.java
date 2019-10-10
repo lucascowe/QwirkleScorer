@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -85,7 +83,10 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         }
         String text = mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME));
         holder.header.setText(text);
-        Log.i("Recycler name","the name " + text);
+        Log.i("Recycler bind " + position," Name: " + text + " Loc: " +
+                mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_LOCATION)) +
+                " num: " + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
+                " sel: " + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED)));
         text = mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN));
         holder.comment.setText(text);
         text = "" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS));
@@ -97,10 +98,13 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         } else {
             holder.linearLayout.setBackgroundColor(0x66111111);
         }
-        ContentValues cv = new ContentValues();
-        cv.put(PlayersTable.COLUMN_LOCATION, position);
-        mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
-                "=" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)),null);
+//        ContentValues cv = new ContentValues();
+//        cv.put(PlayersTable.COLUMN_LOCATION, position);
+//        mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
+//                "=" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)),null);
+//        Log.i("after re-assign","Name: " + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME))+
+//                " loc: " + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_LOCATION)) +
+//                " num: " + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)));
     }
 
     int logPlayerTableContents() {
@@ -108,11 +112,12 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
             return Returns.FAIL;
         }
         do {
-            Log.i("Players Table",mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
-                    ". " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)) + " " +
+            Log.i("Players Table","loc: " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_LOCATION)) +
+                    " #:" + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
+                    " name: " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)) + "last turn: " +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN)) + " # turns:" +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS)) + " score: " +
-                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)) + " Selected: " +
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)) + " Sel: " +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED)));
         } while (mCursor.moveToNext());
         return Returns.SUCCESS;
@@ -142,34 +147,31 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         if (mCursor.moveToPosition(p)) {
             return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER));
         }
-        return Returns.FAIL;
+        Log.i("Error","Position " + p + " out of range of " + mCursor.getCount());
+        return 0;
     }
 
     int getPlayerTurnNumber(int p) {
         if (mCursor.moveToPosition(p)) {
             return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS));
         }
-        return Returns.FAIL;
+        Log.i("Error","Position " + p + " out of range of " + mCursor.getCount());
+        return 0;
     }
 
     int getPlayerScore(int p) {
         if (mCursor.moveToPosition(p)) {
             return mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE));
         }
-        return Returns.FAIL;
+        Log.i("Error","Position " + p + " out of range of " + mCursor.getCount());
+        return 0;
     }
 
     String getPlayerName(int p) {
         if (mCursor.moveToPosition(p)) {
             return mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME));
         }
-        return "";
-    }
-
-    String getPlayerTurn(int p) {
-        if (mCursor.moveToPosition(p)) {
-            return mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN));
-        }
+        Log.i("Error","Position " + p + " out of range of " + mCursor.getCount());
         return "";
     }
 }
