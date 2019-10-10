@@ -22,6 +22,7 @@ public class DbHelp extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PlayersTable.TABLE_NAME + " (" +
                 PlayersTable.COLUMN_NUMBER + " INT(1), " +
+                PlayersTable.COLUMN_LOCATION + " INT(1), " +
                 PlayersTable.COLUMN_NAME + " VARCHAR, " +
                 PlayersTable.COLUMN_SCORE + " INT(4), " +
                 PlayersTable.COLUMN_TURNS + " INT(3), " +

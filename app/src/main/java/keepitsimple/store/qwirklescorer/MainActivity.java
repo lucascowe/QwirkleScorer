@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     RecyclerView recyclerView;
     static RecAdapter recAdapter;
     boolean endGame;
-    SQLiteDatabase mDatabase;
+    static SQLiteDatabase mDatabase;
     static Cursor mCursorPlayers;
     static Cursor mCursorScores;
     DbHelp dbHelp;
@@ -191,14 +191,18 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     void deletePlayer(){
         int selected = getSelected();
-
-        mDatabase.delete(PlayersTable.TABLE_NAME,PlayersTable.COLUMN_NUMBER + "=" + selected,null);
+        mDatabase.delete(PlayersTable.TABLE_NAME,PlayersTable.COLUMN_LOCATION + "=" + selected,null);
         recAdapter.updateCursor(refreshPlayerCursor());
         if (recAdapter.getItemCount() > 0) {
             playerTurn = selected % recAdapter.getItemCount();
             selectPlayer(playerTurn);
         }
-        // TODO: update history cursor and move all players up in the list
+        ContentValues cv = new ContentValues();
+        cv.put(ScoreHistory.COLUMN_SCORE[playerTurn],0);
+        cv.put(ScoreHistory.COLUMN_TURN[playerTurn],"");
+        mDatabase.update(ScoreHistory.TABLE_NAME,cv,null,null);
+        recAdapter.updateCursor(refreshPlayerCursor());
+        refreshScoreCursor();
     }
 
     int getLastScore(int position) {
@@ -252,26 +256,27 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             lastTileButton.setVisibility(View.INVISIBLE);
             endGame = true;
         }
+        recAdapter.updateCursor(refreshPlayerCursor());
+        refreshScoreCursor();
     }
 
     String whoWins() {
         String winner = "";
-        int highestScore = 0;
-        int numberOfWinners = 0;
-//        for (Player p : players) {
-//            if (p.getTotalScore() > highestScore) {
-//                highestScore = p.getTotalScore();
-//                winner = p.getName();
-//                numberOfWinners = 1;
-//            } else if (p.getTotalScore() == highestScore) {
-//                winner += " and " + p.getName();
-//                numberOfWinners++;
-//            }
-//        }
-        if (numberOfWinners > 1) {
-            winner += " are the Winners!!";
+        Cursor c = mDatabase.rawQuery("SELECT " + PlayersTable.COLUMN_NAME +
+                " FROM " + PlayersTable.TABLE_NAME + " WHERE " +
+                PlayersTable.COLUMN_SCORE + "= (SELECT MAX(" + PlayersTable.COLUMN_SCORE +
+                ") FROM " + PlayersTable.TABLE_NAME + ")",null);
+        if (c.getCount() > 1) {
+            for (int ii = 0; ii < c.getCount(); ii++) {
+                c.moveToPosition(ii);
+                if (ii == 0) winner = c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
+                if (ii > 0 && ii < c.getCount() - 1) winner += ", " +
+                        c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
+                else winner += "and " + c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME)) +
+                        " are the Winners!!";
+            }
         } else {
-            winner += " Wins!!";
+            winner += c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME)) + " Wins!!";
         }
         return winner;
     }
@@ -307,8 +312,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         switch (num) {
             case 2:
-//                dbHelp.reset(mDatabase);
-//                recAdapter.updateCursor(refreshPlayerCursor());
+                dbHelp.reset(mDatabase);
+                recAdapter.updateCursor(refreshPlayerCursor());
             case 3:
             case 4:
             case 5:
@@ -431,6 +436,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
         dbHelp = new DbHelp(this);
         mDatabase = dbHelp.getWritableDatabase();
+        dbHelp.reset(mDatabase);
         mCursorPlayers = refreshPlayerCursor();
         mCursorScores = refreshScoreCursor();
 
@@ -495,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         Cursor c = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME +
                 " WHERE " + PlayersTable.COLUMN_SELECTED + "=1", null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex(PlayersTable.COLUMN_NUMBER));
+            return c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION));
         } else {
             Log.e("PlayerTable","Could not find selected player, default to 0");
             return 0;

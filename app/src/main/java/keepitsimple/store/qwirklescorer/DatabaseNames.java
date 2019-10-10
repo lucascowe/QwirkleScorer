@@ -10,6 +10,7 @@ public class DatabaseNames {
     public static final class PlayersTable implements BaseColumns {
         public static final String TABLE_NAME = "players";
         public static final String COLUMN_NUMBER = "player_number";
+        public static final String COLUMN_LOCATION = "location";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_SCORE = "score";
         public static final String COLUMN_TURN = "latest_turn";

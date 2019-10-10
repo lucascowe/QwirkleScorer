@@ -1,6 +1,7 @@
 package keepitsimple.store.qwirklescorer;
 
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,14 +78,21 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
-        position++;
+//        position++;
         if (!sCursor.moveToPosition(position)) {
+            Log.i("history",position + " no row found");
             return;
         }
         String text;
         holder.turn.setText(Integer.toString(position));
-        for (int ii = 0; ii < MainActivity.recAdapter.getItemCount(); ii++) {
-            text = sCursor.getString(sCursor.getColumnIndex(ScoreHistory.COLUMN_TURN[ii]));
+        for (int ii = 0; ii < 4; ii++) {
+            if (ii < MainActivity.recAdapter.getItemCount()) {
+                text = sCursor.getString(sCursor.getColumnIndex(ScoreHistory.COLUMN_TURN[ii]));
+
+            } else {
+                text = "";
+            }
+            Log.i("history", "row: " + position + " player " + ii + "text: " + text);
             holder.players[ii].setText(text);
         }
         if (position % 2 == 1) {

@@ -1,5 +1,6 @@
 package keepitsimple.store.qwirklescorer;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
+import static keepitsimple.store.qwirklescorer.MainActivity.mDatabase;
 
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
@@ -95,15 +97,18 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         } else {
             holder.linearLayout.setBackgroundColor(0x66111111);
         }
+        ContentValues cv = new ContentValues();
+        cv.put(PlayersTable.COLUMN_LOCATION, position);
+        mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
+                "=" + mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)),null);
     }
 
     int logPlayerTableContents() {
-
         if (!mCursor.moveToFirst()) {
             return Returns.FAIL;
         }
         do {
-            Log.i("Players Table:",mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
+            Log.i("Players Table",mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
                     ". " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)) + " " +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN)) + " # turns:" +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS)) + " score: " +

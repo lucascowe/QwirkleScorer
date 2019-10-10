@@ -32,8 +32,8 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
             TextView playerTV = (TextView) playersTR.getChildAt(jj);
             TextView scoreTV = (TextView) scoresTR.getChildAt(jj);
             if (jj <= recAdapter.getItemCount()) {
-                playerTV.setText(recAdapter.getPlayerName(jj));
-                scoreTV.setText(String.valueOf(recAdapter.getPlayerScore(jj)));
+                playerTV.setText(recAdapter.getPlayerName(jj-1));
+                scoreTV.setText(String.valueOf(recAdapter.getPlayerScore(jj-1)));
             } else {
                 playerTV.setVisibility(View.INVISIBLE);
                 scoreTV.setVisibility(View.INVISIBLE);
@@ -41,6 +41,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
         }
 
         initRecycler();
+        recAdapter.logPlayerTableContents();
 
     }
 
