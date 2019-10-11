@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     void deletePlayer(){
+        logScoreTableContents();
         int selected = getSelected();
         // remove players turn history
         ContentValues cv = new ContentValues();
@@ -203,16 +204,19 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 " WHERE " + PlayersTable.COLUMN_LOCATION + " > " + selected +
                 " ORDER BY "+ PlayersTable.COLUMN_LOCATION + " ASC", null);
         if (c.moveToFirst()) {
-            for (int ii = 0; ii < c.getCount(); ii++) {
+            do {
                 int loc = c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION));
+                String name = c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
                 cv.clear();
+                Log.i("location update","# " + c.getInt(c.getColumnIndex(PlayersTable.COLUMN_NUMBER)) +
+                    " " + name + " loc " + loc + " -> " + (loc - 1));
                 cv.put(PlayersTable.COLUMN_LOCATION, loc - 1);
-                mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_LOCATION +
-                        "=" + loc,null);
-            }
+                mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
+                        " = " + c.getInt(c.getColumnIndex(PlayersTable.COLUMN_NUMBER)),null);
+            } while (c.moveToNext());
         }
-
         recAdapter.updateCursor(refreshPlayerCursor());
+        recAdapter.logPlayerTableContents();
         if (recAdapter.getItemCount() == 0) newGame();
         refreshScoreCursor();
     }
@@ -568,7 +572,25 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         playerTurn = position;
         playerName(false);
     }
+
+    void logScoreTableContents() {
+        Log.i("log","Score History log");
+        if (!mCursorScores.moveToFirst()) {
+            Log.i("log","No history found");
+            return;
+        }
+        do {
+            Log.i("Score Table","R: " + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_ROUND)) +
+                    "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[0])) +
+                    "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[1])) +
+                    "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[2])) +
+                    "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[3])));
+        } while (mCursorScores.moveToNext());
+    }
+
 }
+
+
 
 /*
 Todo:
