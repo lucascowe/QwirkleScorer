@@ -2,7 +2,7 @@ package keepitsimple.store.qwirklescorer;
 
 import android.provider.BaseColumns;
 
-public class DatabaseNames {
+class DatabaseNames {
 
     public DatabaseNames() {
     }

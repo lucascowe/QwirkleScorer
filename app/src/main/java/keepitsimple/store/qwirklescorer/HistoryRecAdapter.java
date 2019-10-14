@@ -27,7 +27,7 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView turn, player1, player2, player3, player4;
-        TextView players[] = {player1, player2, player3, player4};
+        TextView[] players = {player1, player2, player3, player4};
         RecListener mRecListener;
         LinearLayout linearLayout;
 

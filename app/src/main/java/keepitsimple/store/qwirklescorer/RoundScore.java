@@ -1,9 +1,9 @@
 package keepitsimple.store.qwirklescorer;
 
 class RoundScore {
-    private String turn[];
-    private int score[];
-    final int maxPlayers = 4;
+    private String[] turn;
+    private int[] score;
+    private final int maxPlayers = 4;
 
     RoundScore() {
         turn = new String[maxPlayers];

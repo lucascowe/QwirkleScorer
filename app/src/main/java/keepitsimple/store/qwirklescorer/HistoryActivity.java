@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import static keepitsimple.store.qwirklescorer.MainActivity.recAdapter;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryRecAdapter.RecListener {
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     static HistoryRecAdapter historyRecAdapter;
 
     @Override
@@ -45,7 +45,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
 
     }
 
-    public void initRecycler() {
+    private void initRecycler() {
         // link Adapter to
         recyclerView = findViewById(R.id.historyRecyclerView);
         historyRecAdapter = new HistoryRecAdapter(MainActivity.mCursorScores, this);

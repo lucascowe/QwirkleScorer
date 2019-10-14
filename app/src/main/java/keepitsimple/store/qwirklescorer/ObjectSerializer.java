@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class ObjectSerializer {
+class ObjectSerializer {
 
     public static String serialize(Serializable obj) throws IOException {
         if (obj == null) return "";
@@ -33,7 +33,7 @@ public class ObjectSerializer {
         }
     }
 
-    public static String encodeBytes(byte[] bytes) {
+    private static String encodeBytes(byte[] bytes) {
         StringBuffer strBuf = new StringBuffer();
 
         for (int i = 0; i < bytes.length; i++) {
@@ -44,7 +44,7 @@ public class ObjectSerializer {
         return strBuf.toString();
     }
 
-    public static byte[] decodeBytes(String str) {
+    private static byte[] decodeBytes(String str) {
         byte[] bytes = new byte[str.length() / 2];
         for (int i = 0; i < str.length(); i+=2) {
             char c = str.charAt(i);

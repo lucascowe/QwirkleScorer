@@ -8,11 +8,11 @@ import android.util.Log;
 
 import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
 
-public class DbHelp extends SQLiteOpenHelper {
+class DbHelp extends SQLiteOpenHelper {
 
 
-    public static final String DATABASE_NAME = "qwirkle_game.db";
-    public static final int VERSION = 1;
+    private static final String DATABASE_NAME = "qwirkle_game.db";
+    private static final int VERSION = 1;
 
     public DbHelp(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
