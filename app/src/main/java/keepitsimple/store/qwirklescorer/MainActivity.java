@@ -53,14 +53,16 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     // adds a new player or rename an existing player
     private void playerName(final Boolean isNewPlayer) {
         if (!isNewPlayer || recAdapter.getItemCount() < 4) {
-            final Button btnAdd, btnCancel, btnFinish;
+            final Button btnOne, btnTwo, btnThree, btnFour, btnFive;
             final Dialog dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.add_player);
             final EditText inputEditText;
             inputEditText = dialog.findViewById(R.id.editTextDialogName);
-            btnCancel = dialog.findViewById(R.id.btnDialogCancel);
-            btnAdd = dialog.findViewById(R.id.btnDialogAdd);
-            btnFinish = dialog.findViewById(R.id.btnDialogFinish);
+            btnOne = dialog.findViewById(R.id.btnOne);
+            btnTwo = dialog.findViewById(R.id.btnTwo);
+            btnThree = dialog.findViewById(R.id.btnThree);
+            btnFour = dialog.findViewById(R.id.btnFour);
+            btnFive = dialog.findViewById(R.id.btnFive);
             if (isNewPlayer) {
                 inputEditText.setText("Player " + (recAdapter.getItemCount()+1));
                 dialog.setTitle("Add player");
@@ -69,16 +71,18 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 inputEditText.setText(getSelectedPlayerName());
                 dialog.setTitle("Rename Player");
                 dialog.setCancelable(true);
-                btnFinish.setText("Save");
-                btnAdd.setText("Delete");
+//                btnFinish.setText("Save");
+//                btnAdd.setText("Delete");
             }
-            btnCancel.setOnClickListener(new View.OnClickListener() {
+            // cancel button
+            btnFive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
                 }
             });
-            btnAdd.setOnClickListener(new View.OnClickListener() {
+            // add button
+            btnTwo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (!isNewPlayer) {
@@ -93,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     }
                 }
             });
-            btnFinish.setOnClickListener(new View.OnClickListener() {
+            // save button
+            btnOne.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (isNewPlayer) {

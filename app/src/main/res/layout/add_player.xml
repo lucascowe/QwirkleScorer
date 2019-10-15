@@ -20,8 +20,8 @@
 
     <EditText
         android:id="@+id/editTextDialogName"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
+        android:layout_width="157dp"
+        android:layout_height="43dp"
         android:layout_margin="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
@@ -32,37 +32,65 @@
         app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
 
     <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="185dp"
+        android:layout_height="184dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDialogName">
 
         <Button
-            android:id="@+id/btnDialogCancel"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnOne"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
             android:tag="0"
+            android:layout_row="0"
+            android:text="Save"
             tools:layout_editor_absoluteX="204dp"
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnDialogAdd"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnTwo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add"
+            android:layout_row="1"
+            android:layout_column="0"
             android:tag="1"
+            android:text="Add"
             tools:layout_editor_absoluteX="5dp"
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnDialogFinish"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnThree"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Finish"
+            android:layout_row="3"
+            android:layout_column="0"
             android:tag="2"
+            android:text="Edit last turn"
             tools:layout_editor_absoluteX="104dp"
             tools:layout_editor_absoluteY="127dp" />
+
+        <Button
+            android:id="@+id/btnFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:tag="3"
+            android:text="Delete turn"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="127dp" />
+
+        <Button
+            android:id="@+id/btnFive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_row="5"
+            android:layout_column="0"
+            android:tag="4"
+            android:text="Cancel"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="127dp" />
+
     </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
