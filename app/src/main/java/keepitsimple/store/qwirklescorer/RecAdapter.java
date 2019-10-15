@@ -167,7 +167,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
     Player getPlayer(int p) {
         if (mCursor.moveToPosition(p)) {
-            return (new Player(mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)),
+            return (new Player(mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NUMBER)),
+                    mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME)),
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_TURN)),
                     mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)),
                     mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS)),

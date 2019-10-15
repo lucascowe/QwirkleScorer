@@ -3,6 +3,7 @@ package keepitsimple.store.qwirklescorer;
 import java.util.ArrayList;
 
 class Player {
+    private int number;
     private String name;
     private String latestTurn;
     private int totalScore;
@@ -21,13 +22,18 @@ class Player {
         selected = false;
     }
 
-    public Player(String name, String latestTurn, int totalScore, int turns, int location, boolean selected) {
+    public Player(int number, String name, String latestTurn, int totalScore, int turns, int location, boolean selected) {
+        this.number = number;
         this.name = name;
         this.latestTurn = latestTurn;
         this.totalScore = totalScore;
         this.turns = turns;
         this.location = location;
         this.selected = selected;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     String getName() {

@@ -32,13 +32,14 @@
         app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
 
     <GridLayout
+        android:id="@+id/gridview"
         android:layout_width="185dp"
-        android:layout_height="184dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDialogName">
 
         <Button
-            android:id="@+id/btnOne"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="0"
@@ -48,7 +49,7 @@
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnTwo"
+            android:id="@+id/btnAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="1"
@@ -59,7 +60,7 @@
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnThree"
+            android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="3"
@@ -70,7 +71,7 @@
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnFour"
+            android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="4"
@@ -81,7 +82,7 @@
             tools:layout_editor_absoluteY="127dp" />
 
         <Button
-            android:id="@+id/btnFive"
+            android:id="@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="5"
