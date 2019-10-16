@@ -42,44 +42,40 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:tag="0"
             android:layout_row="0"
-            android:text="Save"
-            tools:layout_editor_absoluteX="204dp"
-            tools:layout_editor_absoluteY="127dp" />
+            android:text="Save" />
 
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnDeletePlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="1"
+            android:layout_gravity="top"
             android:layout_column="0"
             android:tag="1"
-            android:text="Add"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="127dp" />
+            android:text="Delete Player" />
 
         <Button
             android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="3"
+            android:layout_gravity="top"
             android:layout_column="0"
             android:tag="2"
-            android:text="Edit last turn"
-            tools:layout_editor_absoluteX="104dp"
-            tools:layout_editor_absoluteY="127dp" />
+            android:text="Edit last turn" />
 
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_row="4"
+            android:layout_gravity="top"
             android:layout_column="0"
             android:tag="3"
-            android:text="Delete turn"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="127dp" />
+            android:text="Delete Last Turn"/>
 
         <Button
             android:id="@+id/btnCancel"
@@ -87,10 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_row="5"
             android:layout_column="0"
+            android:layout_gravity="top"
             android:tag="4"
-            android:text="Cancel"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="127dp" />
+            android:text="Cancel" />
 
     </GridLayout>
 

@@ -31,14 +31,14 @@ class DbHelp extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ScoreHistory.TABLE_NAME + " (" +
                 ScoreHistory.COLUMN_ROUND + " INT(3), " +
-                ScoreHistory.COLUMN_SCORE[0] + " VARCHAR, " +
-                ScoreHistory.COLUMN_TURN[0] + " INT(4), " +
-                ScoreHistory.COLUMN_SCORE[1] + " VARCHAR, " +
-                ScoreHistory.COLUMN_TURN[1] + " INT(4), " +
-                ScoreHistory.COLUMN_SCORE[2] + " VARCHAR, " +
-                ScoreHistory.COLUMN_TURN[2] + " INT(4), " +
-                ScoreHistory.COLUMN_SCORE[3] + " VARCHAR, " +
-                ScoreHistory.COLUMN_TURN[3] + " INT(4))");
+                ScoreHistory.COLUMN_SCORE[0] + " INT(4), " +
+                ScoreHistory.COLUMN_TURN[0] + " VARCHAR, " +
+                ScoreHistory.COLUMN_SCORE[1] + " INT(4), " +
+                ScoreHistory.COLUMN_TURN[1] + " VARCHAR, " +
+                ScoreHistory.COLUMN_SCORE[2] + " INT(4), " +
+                ScoreHistory.COLUMN_TURN[2] + " VARCHAR, " +
+                ScoreHistory.COLUMN_SCORE[3] + " INT(4), " +
+                ScoreHistory.COLUMN_TURN[3] + " VARCHAR)");
     }
 
     @Override

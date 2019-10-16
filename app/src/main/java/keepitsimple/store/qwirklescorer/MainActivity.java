@@ -22,19 +22,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
-import static keepitsimple.store.qwirklescorer.HistoryActivity.historyRecAdapter;
 
 public class MainActivity extends AppCompatActivity implements RecAdapter.RecListener{
 
     private int turnScore;
     private int playerTurn;
-    private String moveString = "";
+    private String turnString = "";
     private TextView txvCurrentMove;
     private RecyclerView recyclerView;
     static RecAdapter recAdapter;
@@ -53,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     // adds a new player or rename an existing player
-    private void playerName(final Boolean isNewPlayer) {
+    private void longClickMenu(final Boolean isNewPlayer) {
         if (!isNewPlayer || recAdapter.getItemCount() < 4) {
-            final Button btnAdd, btnCancel, btnSave, btnEdit, btnDelete;
+            final Button btnDeletePlayer, btnCancel, btnSave, btnEdit, btnDelete;
             final GridLayout gridLayout;
             final TextView headerTextView;
             final Dialog dialog = new Dialog(MainActivity.this);
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             final EditText inputEditText;
             inputEditText = dialog.findViewById(R.id.editTextDialogName);
             gridLayout = dialog.findViewById(R.id.gridview);
-            btnAdd = dialog.findViewById(R.id.btnAdd);
+            btnDeletePlayer = dialog.findViewById(R.id.btnDeletePlayer);
             btnSave = dialog.findViewById(R.id.btnSave);
             btnEdit = dialog.findViewById(R.id.btnEdit);
             btnDelete = dialog.findViewById(R.id.btnDelete);
@@ -74,39 +72,18 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 headerTextView.setText("Add player");
                 dialog.setCancelable(true);
                 gridLayout.setRowOrderPreserved(false);
-                btnSave.setVisibility(View.INVISIBLE);
+                btnSave.setText("Add");
                 btnDelete.setVisibility(View.INVISIBLE);
                 btnEdit.setVisibility(View.INVISIBLE);
+                btnCancel.setVisibility(View.INVISIBLE);
+                btnDeletePlayer.setText(btnCancel.getText());
+//                btnDeletePlayer.setTag(btnCancel.getTag());
             } else {
                 inputEditText.setText(getSelectedPlayerName());
                 headerTextView.setText("Rename Player");
                 dialog.setCancelable(true);
-                btnAdd.setText("Delete");
             }
-            // cancel button
-            btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-            // add button
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isNewPlayer) {
-                        deletePlayer();
-                        dialog.dismiss();
-                    }else {
-                        addPlayer(inputEditText.getText().toString());
-                        recAdapter.updateCursor(refreshPlayerCursor());
-                        dialog.dismiss();
-                        playerName(true);
-//                        players.get(playerTurn).setSelected(true);
-                    }
-                }
-            });
-            // save button
+            // add / save button
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -116,9 +93,20 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                         dialog.dismiss();
                     } else {
                         renamePlayer(inputEditText.getText().toString(),getSelected());
-//                        players.get(findSelectedPlayer()).setName(inputEditText.getText().toString());
                         Log.i("Player " + getSelected() + " changed to ", inputEditText.getText().toString());
                         recAdapter.updateCursor(refreshPlayerCursor());
+                        dialog.dismiss();
+                    }
+                }
+            });
+            // cancel / deletePlayer
+            btnDeletePlayer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isNewPlayer) {
+                        dialog.dismiss();
+                    }else {
+                        deletePlayer();
                         dialog.dismiss();
                     }
                 }
@@ -128,17 +116,23 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 @Override
                 public void onClick(View view) {
                     Player player = recAdapter.getPlayer(getSelected());
-                    Cursor c = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME +
-                            " WHERE " + ScoreHistory.COLUMN_ROUND + " = " + player.getTurn(), null);
+//                    Cursor c = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME +
+//                            " WHERE " + ScoreHistory.COLUMN_ROUND + " = " + player.getTurns(), null);
                     ContentValues cv = new ContentValues();
-                    if (c.moveToFirst()) {
-                        turnScore = c.getInt(c.getColumnIndex(ScoreHistory.COLUMN_SCORE[player.getNumber()]));
-                    }
+//                    if (c.moveToFirst()) {
+//                        turnScore = c.getInt(c.getColumnIndex(ScoreHistory.COLUMN_SCORE[player.getNumber()]));
+//                    } else {
+//                        Log.e("ScoreHistory","Couldn't find turn " + player.getTurns() +
+//                                " for player " + player.getNumber());
+//                    }
+                    turnScore = getLastScore(player.getNumber());
                     cv.put(PlayersTable.COLUMN_TURNS, player.getTurns() - 1);
+                    cv.put(PlayersTable.COLUMN_SCORE, player.getTotalScore() - turnScore);
                     mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
                             " = " + player.getNumber(), null);
-                    moveString = player.getTurn();
-                    txvCurrentMove.setText(moveString);
+                    recAdapter.updateCursor(refreshPlayerCursor());
+                    turnString = player.getTurn();
+                    txvCurrentMove.setText(turnString);
                     dialog.dismiss();
                 }
             });
@@ -146,12 +140,17 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteScore();
+                    deleteTurn();
                     dialog.dismiss();
                 }
             });
-            //
-
+            // cancel button
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
             dialog.show();
         } else {
             Toast.makeText(this, "Sorry, Max players is 4", Toast.LENGTH_SHORT).show();
@@ -159,32 +158,32 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     void newPlayer(View view){
-        playerName(true);
+        longClickMenu(true);
         if (recAdapter.getItemCount() == 1) {
             selectPlayer(0);
         }
     }
 
-    void deleteScore() {
+    void deleteTurn() {
         ContentValues cv;
-        int p = getSelected();
+        Player player = recAdapter.getPlayer(getSelected());
         cv = new ContentValues();
-        // clear score from players table
-        cv.put(PlayersTable.COLUMN_TURN,"");
-        cv.put(PlayersTable.COLUMN_SCORE, (recAdapter.getPlayerScore(p) -
-                getLastScore(p)));
-        cv.put(PlayersTable.COLUMN_TURNS,
-                recAdapter.getPlayerTurnNumber(p) - 1);
-        mDatabase.update(PlayersTable.TABLE_NAME, cv,PlayersTable.COLUMN_NUMBER +
-                "=" + p,null);
         // clear score from player history table
         cv.clear();
-        cv.put(ScoreHistory.COLUMN_SCORE[p], 0);
-        cv.put(ScoreHistory.COLUMN_TURN[p], "");
+        cv.put(ScoreHistory.COLUMN_SCORE[player.getNumber()], 0);
+        cv.put(ScoreHistory.COLUMN_TURN[player.getNumber()], "");
         mDatabase.update(ScoreHistory.TABLE_NAME, cv, ScoreHistory.COLUMN_ROUND +
-                "=" + recAdapter.getPlayerTurnNumber(p),null);
+                "=" + player.getTurns(),null);
+        refreshScoreCursor();
+        // clear score from players table
+        cv.clear();
+        cv.put(PlayersTable.COLUMN_TURN,getLastTurn(player.getNumber()));
+        cv.put(PlayersTable.COLUMN_SCORE, (player.getTotalScore() -
+                getLastScore(player.getNumber())));
+        cv.put(PlayersTable.COLUMN_TURNS, player.getTurns() - 1);
+        mDatabase.update(PlayersTable.TABLE_NAME, cv,PlayersTable.COLUMN_NUMBER +
+                "=" + player.getNumber(),null);
         recAdapter.updateCursor(refreshPlayerCursor());
-//        refreshScoreCursor();
     }
 
     void openHistory(View view){
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 ContentValues cv;
                 switch (item.getItemId()) {
                     case R.id.deleteScore:
-                        deleteScore();
+                        deleteTurn();
                         break;
                     case R.id.newGame:
                         newGame();
@@ -284,44 +283,51 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 //        recAdapter.logPlayerTableContents();
     }
 
-    private int getLastScore(int position) {
+    private int getLastScore(int playerNumber) {
         if (mCursorScores.moveToLast()) {
-            return mCursorScores.getInt(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[position]));
+            return mCursorScores.getInt(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_SCORE[playerNumber]));
         }
         return 0;
     }
 
+    private String getLastTurn(int playerNumber) {
+        if (mCursorScores.moveToLast()) {
+            return mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[playerNumber]));
+        }
+        return "";
+    }
+
     private void recordTurn() {
-        // check if round exists
-        int selectedPlayerTurn = recAdapter.getPlayerTurnNumber(getSelected()) + 1;
+        // add turn to player table
+        Player player = recAdapter.getPlayer(getSelected());
+        player.addScore(turnString, turnScore);
         ContentValues cv = new ContentValues();
-        cv.put(PlayersTable.COLUMN_TURN, moveString);
-        cv.put(PlayersTable.COLUMN_SCORE, recAdapter.getPlayerScore(getSelected()) + turnScore);
-        cv.put(PlayersTable.COLUMN_TURNS, selectedPlayerTurn);
+        cv.put(PlayersTable.COLUMN_TURN, player.getTurn());
+        cv.put(PlayersTable.COLUMN_SCORE, player.getTotalScore());
+        cv.put(PlayersTable.COLUMN_TURNS, player.getTurns());
         mDatabase.update(PlayersTable.TABLE_NAME,cv,PlayersTable.COLUMN_LOCATION + "=" +
                 getSelected(),null);
+        // check if round exists in history then add or append row
         Cursor c = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME +
-                " WHERE " + ScoreHistory.COLUMN_ROUND + "=" + selectedPlayerTurn, null);
+                " WHERE " + ScoreHistory.COLUMN_ROUND + "=" + player.getTurns(), null);
+        cv.clear();
+        cv.put(ScoreHistory.COLUMN_SCORE[player.getNumber()], turnScore);
+        cv.put(ScoreHistory.COLUMN_TURN[player.getNumber()], turnString);
         if (c.moveToFirst()) {
-            cv.clear();
-            cv.put(ScoreHistory.COLUMN_SCORE[recAdapter.getPlayerNumber(getSelected())], turnScore);
-            cv.put(ScoreHistory.COLUMN_TURN[recAdapter.getPlayerNumber(getSelected())], moveString);
             mDatabase.update(ScoreHistory.TABLE_NAME,cv,ScoreHistory.COLUMN_ROUND + "=" +
-                    selectedPlayerTurn,null);
+                    player.getTurns(),null);
         } else {
-            cv.clear();
-            cv.put(ScoreHistory.COLUMN_ROUND, selectedPlayerTurn);
-            cv.put(ScoreHistory.COLUMN_SCORE[recAdapter.getPlayerNumber(getSelected())], turnScore);
-            cv.put(ScoreHistory.COLUMN_TURN[recAdapter.getPlayerNumber(getSelected())], moveString);
+            cv.put(ScoreHistory.COLUMN_ROUND, player.getTurns());
             mDatabase.insert(ScoreHistory.TABLE_NAME,null,cv);
         }
         if (c != null) c.close();
+        // if the game is not over move to next players turn
         if (!endGame) {
             playerTurn = (playerTurn + 1) % recAdapter.getItemCount();
             selectPlayer(playerTurn);
             recAdapter.updateCursor(refreshPlayerCursor());
             turnScore = 0;
-            moveString = "";
+            turnString = "";
             txvCurrentMove.setText("");
         } else {
             recAdapter.notifyDataSetChanged();
@@ -370,12 +376,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     endGame = true;
                     turnScore += 6;
                     // if not first move, add +
-                    if (moveString.length() > 0) {
-                        moveString += " + " + 6;
+                    if (turnString.length() > 0) {
+                        turnString += " + " + 6;
                     } else {
-                        moveString = String.valueOf(6);
+                        turnString = String.valueOf(6);
                     }
-                    txvCurrentMove.setText(moveString);
+                    txvCurrentMove.setText(turnString);
                     recordTurn();
                     vibrator.vibrate(2000);
                     break;
@@ -389,25 +395,21 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     void onClick (View view) {
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
-//        MP = MediaPlayer.create(this,R.raw.buttonpress);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         switch (num) {
             case 2:
-//                dbHelp.reset(mDatabase);
-//                recAdapter.updateCursor(refreshPlayerCursor());
             case 3:
             case 4:
             case 5:
-//                MP.start();
                 vibrator.vibrate(50);
                 turnScore += num;
                 // if not first move, add +
-                if (moveString.length() > 0) {
-                    moveString += " + " + (num);
+                if (turnString.length() > 0) {
+                    turnString += " + " + (num);
                 } else {
-                    moveString = String.valueOf(num);
+                    turnString = String.valueOf(num);
                 }
-                txvCurrentMove.setText(moveString);
+                txvCurrentMove.setText(turnString);
                 break;
             // Last Tile Played
             case 6:
@@ -425,12 +427,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     vibrator.vibrate(50);
                     turnScore += num;
                     // if not first move, add +
-                    if (moveString.length() > 0) {
-                        moveString += " + QWIRKLE";
+                    if (turnString.length() > 0) {
+                        turnString += " + QWIRKLE";
                     } else {
-                        moveString = "QWIRKLE";
+                        turnString = "QWIRKLE";
                     }
-                    txvCurrentMove.setText(moveString);
+                    txvCurrentMove.setText(turnString);
                 } else {
                     TextView winnerTextView = findViewById(R.id.winnerTextView);
                     Button saveButton = findViewById(R.id.button8);
@@ -440,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     saveButton.setText("SAVE");
                     lastTileButton.setVisibility(View.VISIBLE);
                     recAdapter.notifyDataSetChanged();
-                    moveString = "";
+                    turnString = "";
                     turnScore = 0;
                     endGame = false;
                 }
@@ -460,21 +462,21 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // clear
             case 8:
-                moveString = "";
+                turnString = "";
                 turnScore = 0;
                 vibrator.vibrate(50);
                 break;
             // delete
             case 9:
                 vibrator.vibrate(50);
-                String[] turns = moveString.split(" ",48);
-                moveString = "";
+                String[] turns = turnString.split(" ",48);
+                turnString = "";
                 turnScore = 0;
                 for (int i = 0; i < turns.length - 1; i+= 2) {
                     if (i == 0) {
-                        moveString = String.format("%s",turns[i]);
+                        turnString = String.format("%s",turns[i]);
                     } else {
-                        moveString = String.format("%s + %s", moveString, turns[i]);
+                        turnString = String.format("%s + %s", turnString, turns[i]);
                     }
                     if (turns[i].equals("QWIRKLE")) {
                         turnScore += 12;
@@ -487,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             default:
                 Log.i("Error","Invalid button tag");
         }
-        txvCurrentMove.setText(moveString);
+        txvCurrentMove.setText(turnString);
     }
 
     private void initRecycler() {
@@ -514,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         mCursorScores = refreshScoreCursor();
 
         initRecycler();
-        playerName(true);
+        longClickMenu(true);
     }
 
     private Cursor refreshPlayerCursor() {
@@ -631,7 +633,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         selectPlayer(position);
         recAdapter.updateCursor(refreshPlayerCursor());
         playerTurn = position;
-        playerName(false);
+        longClickMenu(false);
     }
 
     private void logScoreTableContents() {
