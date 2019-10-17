@@ -39,7 +39,9 @@
         \n\n4. Press on a player to change to turns or it will move automatically after you save a turn.
         \n\n5. Long press on a player to rename or get specific menu options.
         \n\n6. Use the buttons at the bottom to put in each score.
-        \n\n7. Modifying scores from history will be in a future version."
+        \n\n7. Modifying scores from history will be in a future version.
+        \n\n8. Start a new game will clear all scores but keep players for the next game
+        \n\n9. Disable lock screen will stop you screen from locking while you play"
         android:textColor="#FFFFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
