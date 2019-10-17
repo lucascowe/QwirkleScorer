@@ -202,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ContentValues cv;
                 switch (item.getItemId()) {
                     case R.id.deleteScore:
                         deleteTurn();
@@ -378,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         return winner;
     }
 
-    private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+    private final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
@@ -460,7 +459,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // save
             case 7:
-                Button saveButton = findViewById(R.id.button8);
                 if (!endGame) {
                     vibrator.vibrate(50);
                     recordTurn();
@@ -597,8 +595,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     private void renamePlayer(String name, int position) {
-        mDatabase.execSQL("UPDATE " + PlayersTable.TABLE_NAME + " SET " + PlayersTable.COLUMN_NAME +
-                " = '" + name + "' WHERE " + PlayersTable.COLUMN_NUMBER + "=" + recAdapter.getPlayerNumber(getSelected()));
+        Player player = recAdapter.getPlayer(getSelected());
+        player.setName(name);
+        updatePlayer(player);
     }
 
     private void selectPlayer(int position) {
@@ -614,7 +613,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     private int getSelected() {
         Cursor c = mDatabase.rawQuery("SELECT * FROM " + PlayersTable.TABLE_NAME +
                 " WHERE " + PlayersTable.COLUMN_SELECTED + "=1",null);
-        String s = getSelectedPlayerName();
           if (c.moveToFirst()) {
             Log.i("Selected","Player found in location " +
                     c.getInt(c.getColumnIndex(PlayersTable.COLUMN_LOCATION)));

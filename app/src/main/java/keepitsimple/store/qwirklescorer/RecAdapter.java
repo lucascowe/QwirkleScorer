@@ -15,7 +15,7 @@ import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     private Cursor mCursor;
-    private RecListener recListener;
+    private final RecListener recListener;
 
     RecAdapter(Cursor list, RecListener listener) {
         this.mCursor = list;
@@ -24,9 +24,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView header, comment, data3, data4;
-        RecListener mRecListener;
-        LinearLayout linearLayout;
+        final TextView header, comment, data3, data4;
+        final RecListener mRecListener;
+        final LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
@@ -97,9 +97,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         }
     }
 
-    int logPlayerTableContents() {
+    void logPlayerTableContents() {
         if (!mCursor.moveToFirst()) {
-            return Returns.FAIL;
+            return;
         }
         do {
             Log.i("Players Table","loc: " + mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_LOCATION)) +
@@ -110,7 +110,6 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)) + " Sel: " +
                     mCursor.getString(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED)));
         } while (mCursor.moveToNext());
-        return Returns.SUCCESS;
     }
 
     @Override

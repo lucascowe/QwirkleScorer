@@ -1,7 +1,5 @@
 package keepitsimple.store.qwirklescorer;
 
-import java.util.ArrayList;
-
 class Player {
     private int number;
     private String name;
@@ -10,17 +8,6 @@ class Player {
     private int turns;
     private int location;
     private boolean selected;
-
-    Player(String player) {
-        if (player.isEmpty()) {
-            player = "Player X";
-        }
-        this.name = player;
-        this.latestTurn = "";
-        totalScore = 0;
-        turns = 0;
-        selected = false;
-    }
 
     Player(int number, String name, String latestTurn, int totalScore, int turns, int location, boolean selected) {
         this.number = number;

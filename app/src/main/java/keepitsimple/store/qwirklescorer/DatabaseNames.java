@@ -24,9 +24,4 @@ class DatabaseNames {
         public static final String[] COLUMN_SCORE = {"p1score","p2score","p3score","p4score"};
         public static final String[] COLUMN_TURN = {"p1turn","p2turn","p3turn","p4turn"};
     }
-
-    public static final class Returns {
-        public static final int FAIL = -1;
-        public static final int SUCCESS = 1;
-    }
 }

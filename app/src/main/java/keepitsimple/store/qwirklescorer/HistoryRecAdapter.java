@@ -17,7 +17,7 @@ import static keepitsimple.store.qwirklescorer.MainActivity.*;
 
 public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
     private Cursor sCursor;
-    private RecListener recListener;
+    private final RecListener recListener;
 
     HistoryRecAdapter(Cursor scoreCursor, RecListener listener) {
         this.sCursor = scoreCursor;
@@ -26,10 +26,11 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView turn, player1, player2, player3, player4;
-        TextView[] players = {player1, player2, player3, player4};
-        RecListener mRecListener;
-        LinearLayout linearLayout;
+        final TextView turn;
+        TextView player1, player2, player3, player4;
+        final TextView[] players = {player1, player2, player3, player4};
+        final RecListener mRecListener;
+        final LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);

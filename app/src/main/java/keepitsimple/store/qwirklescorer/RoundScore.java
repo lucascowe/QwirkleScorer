@@ -21,7 +21,7 @@ class RoundScore {
     }
 
     void clearScore(int position) {
-        int ii = 0;
+        int ii;
         for (ii = position; ii < maxPlayers - 1; ii++) {
             this.score[ii] = this.score[ii + 1];
             this.turn[ii] = this.turn[ii + 1];
