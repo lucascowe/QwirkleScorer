@@ -173,7 +173,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
                     mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SCORE)),
                     mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_TURNS)),
                     mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_LOCATION)),
-                    (mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_NAME))) == 1 ? true : false));
+                    (mCursor.getInt(mCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED))) == 1));
         }
         return null;
     }

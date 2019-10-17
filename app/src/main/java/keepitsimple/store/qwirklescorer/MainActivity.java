@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             dialog.setContentView(R.layout.add_player);
             final EditText inputEditText;
             inputEditText = dialog.findViewById(R.id.editTextDialogName);
-            gridLayout = dialog.findViewById(R.id.gridview);
+            gridLayout = dialog.findViewById(R.id.gridLayout);
             btnDeletePlayer = dialog.findViewById(R.id.btnDeletePlayer);
             btnSave = dialog.findViewById(R.id.btnSave);
             btnEdit = dialog.findViewById(R.id.btnEdit);
@@ -115,24 +115,13 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    // delete the last turn and then put the score in the editText
                     Player player = recAdapter.getPlayer(getSelected());
-//                    Cursor c = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME +
-//                            " WHERE " + ScoreHistory.COLUMN_ROUND + " = " + player.getTurns(), null);
-                    ContentValues cv = new ContentValues();
-//                    if (c.moveToFirst()) {
-//                        turnScore = c.getInt(c.getColumnIndex(ScoreHistory.COLUMN_SCORE[player.getNumber()]));
-//                    } else {
-//                        Log.e("ScoreHistory","Couldn't find turn " + player.getTurns() +
-//                                " for player " + player.getNumber());
-//                    }
-                    turnScore = getLastScore(player.getNumber());
-                    cv.put(PlayersTable.COLUMN_TURNS, player.getTurns() - 1);
-                    cv.put(PlayersTable.COLUMN_SCORE, player.getTotalScore() - turnScore);
-                    mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
-                            " = " + player.getNumber(), null);
-                    recAdapter.updateCursor(refreshPlayerCursor());
                     turnString = player.getTurn();
+                    turnScore = getRoundScore(player.getNumber(),player.getTurns());
                     txvCurrentMove.setText(turnString);
+                    player.deleteTurn(turnScore, getRoundTurn(player.getNumber(),player.getTurns() - 1));
+                    updatePlayer(player);
                     dialog.dismiss();
                 }
             });
@@ -157,36 +146,48 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
     }
 
-    void newPlayer(View view){
+    public void newPlayer(View view){
         longClickMenu(true);
         if (recAdapter.getItemCount() == 1) {
             selectPlayer(0);
         }
     }
 
+    // delete last turn of selected player
     void deleteTurn() {
-        ContentValues cv;
         Player player = recAdapter.getPlayer(getSelected());
-        cv = new ContentValues();
-        // clear score from player history table
-        cv.clear();
-        cv.put(ScoreHistory.COLUMN_SCORE[player.getNumber()], 0);
-        cv.put(ScoreHistory.COLUMN_TURN[player.getNumber()], "");
-        mDatabase.update(ScoreHistory.TABLE_NAME, cv, ScoreHistory.COLUMN_ROUND +
-                "=" + player.getTurns(),null);
-        refreshScoreCursor();
-        // clear score from players table
-        cv.clear();
-        cv.put(PlayersTable.COLUMN_TURN,getLastTurn(player.getNumber()));
-        cv.put(PlayersTable.COLUMN_SCORE, (player.getTotalScore() -
-                getLastScore(player.getNumber())));
-        cv.put(PlayersTable.COLUMN_TURNS, player.getTurns() - 1);
-        mDatabase.update(PlayersTable.TABLE_NAME, cv,PlayersTable.COLUMN_NUMBER +
-                "=" + player.getNumber(),null);
+        // save last score value  to subtract from total score
+        int score = getRoundScore(player.getNumber(),player.getTurns());
+        String turn = getRoundTurn(player.getNumber(),player.getTurns() - 1);
+        player.deleteTurn(score,turn);
+        deletePlayerRound(player.getNumber(),player.getTurns() + 1);
+        updatePlayer(player);
+    }
+
+    // update player info in database
+    void updatePlayer(Player player) {
+        ContentValues cv = new ContentValues();
+        cv.put(PlayersTable.COLUMN_NAME, player.getName());
+        cv.put(PlayersTable.COLUMN_TURN, player.getTurn());
+        cv.put(PlayersTable.COLUMN_SCORE, player.getTotalScore());
+        cv.put(PlayersTable.COLUMN_TURNS, player.getTurns());
+        cv.put(PlayersTable.COLUMN_LOCATION, player.getLocation());
+        cv.put(PlayersTable.COLUMN_SELECTED, player.isSelected());
+        mDatabase.update(PlayersTable.TABLE_NAME, cv, PlayersTable.COLUMN_NUMBER +
+                        " = " + player.getNumber(),null);
         recAdapter.updateCursor(refreshPlayerCursor());
     }
 
-    void openHistory(View view){
+    void deletePlayerRound(int player, int round) {
+        ContentValues cv = new ContentValues();
+        cv.put(ScoreHistory.COLUMN_SCORE[player], 0);
+        cv.put(ScoreHistory.COLUMN_TURN[player], "");
+        mDatabase.update(ScoreHistory.TABLE_NAME, cv, ScoreHistory.COLUMN_ROUND +
+                "=" + round,null);
+        refreshScoreCursor();
+    }
+
+    public void openHistory(View view){
         Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
         startActivity(intent);
     }
@@ -283,18 +284,22 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 //        recAdapter.logPlayerTableContents();
     }
 
-    private int getLastScore(int playerNumber) {
-        if (mCursorScores.moveToLast()) {
-            return mCursorScores.getInt(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_SCORE[playerNumber]));
+    private int getRoundScore(int playerNumber, int round) {
+        int score = 0;
+        if (mCursorScores.moveToPosition(round - 1)) {
+                score = mCursorScores.getInt(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_SCORE[playerNumber]));
+        } else {
+            Log.i("ERR","didn't find round");
         }
-        return 0;
+        return score;
     }
 
-    private String getLastTurn(int playerNumber) {
-        if (mCursorScores.moveToLast()) {
-            return mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[playerNumber]));
+    private String getRoundTurn(int playerNumber, int round) {
+        String lastTurn = "";
+        if (mCursorScores.moveToPosition(round - 1)) {
+            lastTurn = mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[playerNumber]));
         }
-        return "";
+        return lastTurn;
     }
 
     private void recordTurn() {
@@ -392,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         }
     };
 
-    void onClick (View view) {
+    public void onClick (View view) {
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);

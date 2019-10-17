@@ -22,7 +22,7 @@ class Player {
         selected = false;
     }
 
-    public Player(int number, String name, String latestTurn, int totalScore, int turns, int location, boolean selected) {
+    Player(int number, String name, String latestTurn, int totalScore, int turns, int location, boolean selected) {
         this.number = number;
         this.name = name;
         this.latestTurn = latestTurn;
@@ -32,7 +32,7 @@ class Player {
         this.selected = selected;
     }
 
-    public int getNumber() {
+    int getNumber() {
         return number;
     }
 
@@ -58,20 +58,22 @@ class Player {
         this.turns++;
     }
 
-    void resetScore() {
-        this.totalScore = 0;
-        this.latestTurn = "";
-        this.turns = 0;
-    }
-
-    void deleteTurn(int score) {
+    void deleteTurn(int score, String lastTurn) {
         this.totalScore -= score;
         this.turns--;
-        this.latestTurn = "";
+        this.latestTurn = lastTurn;
     }
 
     int getTurns() {
         return this.turns;
+    }
+
+    int getLocation() {
+        return location;
+    }
+
+    public void setLocation(int location) {
+        this.location = location;
     }
 
     boolean isSelected() {
