@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             selectPlayer(playerTurn);
             recAdapter.updateCursor(refreshPlayerCursor());
             turnScore = 0;
-            turnString = "";
+            turnString = "0";
             txvCurrentMove.setText("");
         } else {
             recAdapter.notifyDataSetChanged();
@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     endGame = true;
                     turnScore += 6;
                     // if not first move, add +
-                    if (turnString.length() > 0) {
+                    if (turnString != "0") {
                         turnString += " + " + 6;
                     } else {
                         turnString = String.valueOf(6);
@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 vibrator.vibrate(50);
                 turnScore += num;
                 // if not first move, add +
-                if (turnString.length() > 0) {
+                if (turnString != "0") {
                     turnString += " + " + (num);
                 } else {
                     turnString = String.valueOf(num);
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     vibrator.vibrate(50);
                     turnScore += num;
                     // if not first move, add +
-                    if (turnString.length() > 0) {
+                    if (turnString != "0") {
                         turnString += " + QWIRKLE";
                     } else {
                         turnString = "QWIRKLE";
@@ -450,8 +450,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     saveButton.setText("SAVE");
                     lastTileButton.setVisibility(View.VISIBLE);
                     recAdapter.notifyDataSetChanged();
-                    turnString = "";
+                    turnString = "0";
                     turnScore = 0;
+                    newGame();
                     endGame = false;
                 }
                 break;
@@ -468,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 break;
             // clear
             case 8:
-                turnString = "";
+                turnString = "0";
                 turnScore = 0;
                 vibrator.vibrate(50);
                 break;
@@ -476,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             case 9:
                 vibrator.vibrate(50);
                 String[] turns = turnString.split(" ",48);
-                turnString = "";
+                turnString = "0";
                 turnScore = 0;
                 for (int i = 0; i < turns.length - 1; i+= 2) {
                     if (i == 0) {
@@ -491,6 +492,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                         turnScore += Integer.parseInt(turns[i]);
                     }
                 }
+
                 break;
             default:
                 Log.i("Error","Invalid button tag");
@@ -514,7 +516,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         txvCurrentMove = findViewById(R.id.textView);
-        txvCurrentMove.setText("");
+        txvCurrentMove.setText("0");
+        turnString = "0";
+
 
         dbHelp = new DbHelp(this);
         mDatabase = dbHelp.getWritableDatabase();

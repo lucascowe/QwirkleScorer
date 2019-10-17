@@ -53,6 +53,7 @@ class Player {
     }
 
     void addScore(String turn, int totalScore) {
+
         this.latestTurn = turn;
         this.totalScore += totalScore;
         this.turns++;
