@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/newGame" android:title="Start New Game"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/newGame"
+        android:title="Start New Game" />
     <item android:title="Delete Turn" android:id="@+id/deleteScore"></item>
     <item android:id="@+id/screenLock" android:title="Disable Screen Lock"></item>
     <item android:title="How to / Help" android:id="@+id/howTo"></item>

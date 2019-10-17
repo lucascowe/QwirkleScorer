@@ -12,8 +12,7 @@ import android.widget.TextView;
 import static keepitsimple.store.qwirklescorer.MainActivity.recAdapter;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryRecAdapter.RecListener {
-    private RecyclerView recyclerView;
-    static HistoryRecAdapter historyRecAdapter;
+    private static HistoryRecAdapter historyRecAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryRecAdap
 
     private void initRecycler() {
         // link Adapter to
-        recyclerView = findViewById(R.id.historyRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.historyRecyclerView);
         historyRecAdapter = new HistoryRecAdapter(MainActivity.mCursorScores, this);
 
         // Set up Recycler manager to link to adapter

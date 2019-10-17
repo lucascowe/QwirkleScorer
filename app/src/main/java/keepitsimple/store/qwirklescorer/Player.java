@@ -1,7 +1,7 @@
 package keepitsimple.store.qwirklescorer;
 
 class Player {
-    private int number;
+    private final int number;
     private String name;
     private String latestTurn;
     private int totalScore;

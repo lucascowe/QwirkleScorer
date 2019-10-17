@@ -34,13 +34,11 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     private int playerTurn;
     private String turnString = "";
     private TextView txvCurrentMove;
-    private RecyclerView recyclerView;
     static RecAdapter recAdapter;
     private boolean endGame;
     private static SQLiteDatabase mDatabase;
     static Cursor mCursorPlayers;
     static Cursor mCursorScores;
-    private DbHelp dbHelp;
     private Vibrator vibrator;
 
     @Override
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     // delete last turn of selected player
-    void deleteTurn() {
+    private void deleteTurn() {
         Player player = recAdapter.getPlayer(getSelected());
         if (player.getTurns() > 0) {
             // save last score value  to subtract from total score
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     }
 
     // update player info in database
-    void updatePlayer(Player player) {
+    private void updatePlayer(Player player) {
         ContentValues cv = new ContentValues();
         cv.put(PlayersTable.COLUMN_NAME, player.getName());
         cv.put(PlayersTable.COLUMN_TURN, player.getTurn());
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         recAdapter.updateCursor(refreshPlayerCursor());
     }
 
-    void deletePlayerRound(int player, int round) {
+    private void deletePlayerRound(int player, int round) {
         ContentValues cv = new ContentValues();
         cv.put(ScoreHistory.COLUMN_SCORE[player], 0);
         cv.put(ScoreHistory.COLUMN_TURN[player], "");
@@ -502,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     private void initRecycler() {
         // link Adapter to list
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recAdapter = new RecAdapter(mCursorPlayers,this);
 
         // Set up Recycler manager to link to adapter
@@ -520,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         turnString = "0";
 
 
-        dbHelp = new DbHelp(this);
+        DbHelp dbHelp = new DbHelp(this);
         mDatabase = dbHelp.getWritableDatabase();
         mCursorPlayers = refreshPlayerCursor();
         mCursorScores = refreshScoreCursor();
