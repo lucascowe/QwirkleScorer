@@ -118,10 +118,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     // delete the last turn and then put the score in the editText
                     Player player = recAdapter.getPlayer(getSelected());
                     turnString = player.getTurn();
-                    turnScore = getRoundScore(player.getNumber(),player.getTurns());
-                    txvCurrentMove.setText(turnString);
-                    player.deleteTurn(turnScore, getRoundTurn(player.getNumber(),player.getTurns() - 1));
-                    updatePlayer(player);
+                    if (player.getTurns() > 0) {
+                        turnScore = getRoundScore(player.getNumber(), player.getTurns());
+                        txvCurrentMove.setText(turnString);
+                        player.deleteTurn(turnScore, getRoundTurn(player.getNumber(), player.getTurns() - 1));
+                        updatePlayer(player);
+                    }
                     dialog.dismiss();
                 }
             });
