@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 dialog.setCancelable(true);
                 gridLayout.setRowOrderPreserved(false);
                 btnSave.setText("Add");
-                btnDelete.setVisibility(View.INVISIBLE);
-                btnEdit.setVisibility(View.INVISIBLE);
-                btnCancel.setVisibility(View.INVISIBLE);
+                btnDelete.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.GONE);
+                btnCancel.setVisibility(View.GONE);
                 btnDeletePlayer.setText(btnCancel.getText());
 //                btnDeletePlayer.setTag(btnCancel.getTag());
             } else {
