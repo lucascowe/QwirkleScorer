@@ -360,11 +360,14 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         if (c.getCount() > 1) {
             for (int ii = 0; ii < c.getCount(); ii++) {
                 c.moveToPosition(ii);
-                if (ii == 0) winner = c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
-                if (ii > 0 && ii < c.getCount() - 1) winner += ", " +
-                        c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
-                else winner += "and " + c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME)) +
-                        " are the Winners!!";
+                if (ii == 0) {
+                    winner = c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
+                } else if (ii < c.getCount() - 1) {
+                    winner += ", " + c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME));
+                } else {
+                    winner += " and " + c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME)) +
+                            " are the Winners!!";
+                }
             }
         } else if (c.moveToFirst()) {
             winner += c.getString(c.getColumnIndex(PlayersTable.COLUMN_NAME)) + " Wins!!";
@@ -456,10 +459,8 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             case 7:
                 Button saveButton = findViewById(R.id.button8);
                 if (!endGame) {
-                    if (turnScore > 0) {
-                        vibrator.vibrate(50);
-                        recordTurn();
-                    }
+                    vibrator.vibrate(50);
+                    recordTurn();
                 } else {
                     finish();
                     System.exit(0);
