@@ -156,12 +156,14 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     // delete last turn of selected player
     void deleteTurn() {
         Player player = recAdapter.getPlayer(getSelected());
-        // save last score value  to subtract from total score
-        int score = getRoundScore(player.getNumber(),player.getTurns());
-        String turn = getRoundTurn(player.getNumber(),player.getTurns() - 1);
-        player.deleteTurn(score,turn);
-        deletePlayerRound(player.getNumber(),player.getTurns() + 1);
-        updatePlayer(player);
+        if (player.getTurns() > 0) {
+            // save last score value  to subtract from total score
+            int score = getRoundScore(player.getNumber(), player.getTurns());
+            String turn = getRoundTurn(player.getNumber(), player.getTurns() - 1);
+            player.deleteTurn(score, turn);
+            deletePlayerRound(player.getNumber(), player.getTurns() + 1);
+            updatePlayer(player);
+        }
     }
 
     // update player info in database
@@ -667,17 +669,6 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
 /*
 Todo:
-L 1. Save data
-A 2. Load Menu from button and change S to cog icon - Done but still need cog icon
-A 3. remove menu line (if it works) - Done
-FIXED L 4. fix score reset bug
-L 5. Edit last score
 6. Edit score history
-A 7. Remove starting players - Done
-A 8. Player X on add player - Done
-A 9. sound / haptic feedback on button press - Done
-L 10. Winning player message logic
-
-// TODO: Add random select for who starts?
 
  */
