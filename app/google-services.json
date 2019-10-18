@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "636693307079",
+    "firebase_url": "https://qwirklescorer.firebaseio.com",
+    "project_id": "qwirklescorer",
+    "storage_bucket": "qwirklescorer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636693307079:android:753cd6431774f1ecb2a8e2",
+        "android_client_info": {
+          "package_name": "keepitsimple.store.qwirklescorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636693307079-4rnm52p045ss8gm13enlc6mbn1irvoss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQTtVowGaNE_lXwi_zxX5P05jQhx4Kzyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636693307079-4rnm52p045ss8gm13enlc6mbn1irvoss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
