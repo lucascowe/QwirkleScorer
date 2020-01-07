@@ -30,7 +30,7 @@ import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
 
 public class MainActivity extends AppCompatActivity implements RecAdapter.RecListener{
 
-    private int turnScore;
+    private int turnScore = 0;
     private int playerTurn;
     private String turnString;
     private TextView txvCurrentMove;
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     private void recordTurn() {
         // add turn to player table
         Player player = recAdapter.getPlayer(getSelected());
-        player.addScore(turnString, turnScore);
+        player.addScore((null == turnString) ? Integer.toString(turnScore) : turnString, turnScore);
         ContentValues cv = new ContentValues();
         cv.put(PlayersTable.COLUMN_TURN, player.getTurn());
         cv.put(PlayersTable.COLUMN_SCORE, player.getTotalScore());
