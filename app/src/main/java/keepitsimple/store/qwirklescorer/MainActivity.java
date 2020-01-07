@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
     private int turnScore;
     private int playerTurn;
-    private String turnString = "";
+    private String turnString;
     private TextView txvCurrentMove;
     static RecAdapter recAdapter;
     private boolean endGame;
@@ -518,6 +518,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         txvCurrentMove = findViewById(R.id.textView);
         txvCurrentMove.setText("0");
         turnString = "0";
+        turnScore = 0;
 
 
         DbHelp dbHelp = new DbHelp(this);
