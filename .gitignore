@@ -1,16 +1,16 @@
 # Built application files
-*.ap_
+#*.ap_
 
 # Files for the ART/Dalvik VM
-*.dex
+#*.dex
 
 # Java class files
-*.class
+#*.class
 
 # Generated files
 bin/
 gen/
-out/
+#out/
 release/
 
 # Gradle files
@@ -55,7 +55,7 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
+app/google-services.json
 
 # Freeline
 freeline.py

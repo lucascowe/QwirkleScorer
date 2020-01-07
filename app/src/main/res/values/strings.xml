@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Qwirkle Scorer</string>
+    <string name="app_name">Qwirkle Score Tracker</string>
+    <string name="description">Qwirkle Score Tracker Board Scorer Keeper Counter Scoreboard</string>
 </resources>
