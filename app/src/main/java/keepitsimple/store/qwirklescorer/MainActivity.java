@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -405,97 +408,105 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
         Button button = (Button) view;
         int num = Integer.parseInt(button.getTag().toString());
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        switch (num) {
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                vibrator.vibrate(50);
-                turnScore += num;
-                // if not first move, add +
-                if (turnString != "0") {
-                    turnString += " + " + (num);
-                } else {
-                    turnString = String.valueOf(num);
-                }
-                txvCurrentMove.setText(turnString);
-                break;
-            // Last Tile Played
-            case 6:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("This means a player has played their last tile and the game " +
-                        "is over, they will get a bonus 6 points.  Is this correct?")
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-                break;
-            // Qwirkle
-            case 12:
-                Button qwirkleButton = findViewById(R.id.button5);
-                if(!endGame) {
-//                    MP.start();
+        if (recAdapter.getItemCount() < 1) {
+            Toast.makeText(this,"Add players to use the keyboard!",Toast.LENGTH_SHORT)
+                    .show();
+            Button addPlayerButton = findViewById(R.id.addPlayerButton);
+//            addPlayerButton.setBackgroundColor("#FFFF000000");
+//            final Animation animation = new AnimationSet();
+        } else {
+            switch (num) {
+                case 2:
+                case 3:
+                case 4:
+                case 5:
                     vibrator.vibrate(50);
                     turnScore += num;
                     // if not first move, add +
                     if (turnString != "0") {
-                        turnString += " + QWIRKLE";
+                        turnString += " + " + (num);
                     } else {
-                        turnString = "QWIRKLE";
+                        turnString = String.valueOf(num);
                     }
                     txvCurrentMove.setText(turnString);
-                } else {
-                    TextView winnerTextView = findViewById(R.id.winnerTextView);
-                    Button saveButton = findViewById(R.id.button8);
-                    Button lastTileButton = findViewById(R.id.button4);
-                    winnerTextView.setVisibility(View.INVISIBLE);
-                    qwirkleButton.setText("QWIRKLE");
-                    saveButton.setText("SAVE");
-                    lastTileButton.setVisibility(View.VISIBLE);
-                    recAdapter.notifyDataSetChanged();
+                    break;
+                // Last Tile Played
+                case 6:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("This means a player has played their last tile and the game " +
+                            "is over, they will get a bonus 6 points.  Is this correct?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+
+                    break;
+                // Qwirkle
+                case 12:
+                    Button qwirkleButton = findViewById(R.id.button5);
+                    if (!endGame) {
+//                    MP.start();
+                        vibrator.vibrate(50);
+                        turnScore += num;
+                        // if not first move, add +
+                        if (turnString != "0") {
+                            turnString += " + QWIRKLE";
+                        } else {
+                            turnString = "QWIRKLE";
+                        }
+                        txvCurrentMove.setText(turnString);
+                    } else {
+                        TextView winnerTextView = findViewById(R.id.winnerTextView);
+                        Button saveButton = findViewById(R.id.button8);
+                        Button lastTileButton = findViewById(R.id.button4);
+                        winnerTextView.setVisibility(View.INVISIBLE);
+                        qwirkleButton.setText("QWIRKLE");
+                        saveButton.setText("SAVE");
+                        lastTileButton.setVisibility(View.VISIBLE);
+                        recAdapter.notifyDataSetChanged();
+                        turnString = "0";
+                        turnScore = 0;
+                        newGame();
+                        endGame = false;
+                    }
+                    break;
+                // save
+                case 7:
+                    if (!endGame) {
+                        vibrator.vibrate(50);
+                        recordTurn();
+                    } else {
+                        finish();
+                        System.exit(0);
+                    }
+                    break;
+                // clear
+                case 8:
                     turnString = "0";
                     turnScore = 0;
-                    newGame();
-                    endGame = false;
-                }
-                break;
-            // save
-            case 7:
-                if (!endGame) {
                     vibrator.vibrate(50);
-                    recordTurn();
-                } else {
-                    finish();
-                    System.exit(0);
-                }
-                break;
-            // clear
-            case 8:
-                turnString = "0";
-                turnScore = 0;
-                vibrator.vibrate(50);
-                break;
-            // delete
-            case 9:
-                vibrator.vibrate(50);
-                String[] turns = turnString.split(" ",48);
-                turnString = "0";
-                turnScore = 0;
-                for (int i = 0; i < turns.length - 1; i+= 2) {
-                    if (i == 0) {
-                        turnString = String.format("%s",turns[i]);
-                    } else {
-                        turnString = String.format("%s + %s", turnString, turns[i]);
+                    break;
+                // delete
+                case 9:
+                    vibrator.vibrate(50);
+                    String[] turns = turnString.split(" ", 48);
+                    turnString = "0";
+                    turnScore = 0;
+                    for (int i = 0; i < turns.length - 1; i += 2) {
+                        if (i == 0) {
+                            turnString = String.format("%s", turns[i]);
+                        } else {
+                            turnString = String.format("%s + %s", turnString, turns[i]);
+                        }
+                        if (turns[i].equals("QWIRKLE")) {
+                            turnScore += 12;
+                        } else {
+                            Log.i("debug", "passing " + turns[i]);
+                            turnScore += Integer.parseInt(turns[i]);
+                        }
                     }
-                    if (turns[i].equals("QWIRKLE")) {
-                        turnScore += 12;
-                    } else {
-                        Log.i("debug","passing " + turns[i]);
-                        turnScore += Integer.parseInt(turns[i]);
-                    }
-                }
-
-                break;
-            default:
-                Log.i("Error","Invalid button tag");
+                    break;
+                default:
+                    Log.i("Error", "Invalid button tag");
+            }
         }
         txvCurrentMove.setText(turnString);
     }
