@@ -37,9 +37,10 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     private RecyclerView recyclerView;
     static RecAdapter recAdapter;
     private boolean endGame;
-    private static SQLiteDatabase mDatabase;
+    static SQLiteDatabase mDatabase;
     static Cursor mCursorPlayers;
     static Cursor mCursorScores;
+    static  Cursor mCursorGames;
     private DbHelp dbHelp;
     private Vibrator vibrator;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                 btnDelete.setVisibility(View.INVISIBLE);
                 btnEdit.setVisibility(View.INVISIBLE);
                 btnCancel.setVisibility(View.INVISIBLE);
+//                btnDelete.setLayoutParams(layout_row, 2);
                 btnDeletePlayer.setText(btnCancel.getText());
 //                btnDeletePlayer.setTag(btnCancel.getTag());
             } else {
@@ -206,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
             public boolean onMenuItemClick(MenuItem item) {
                 ContentValues cv;
                 switch (item.getItemId()) {
+                    case R.id.selectGame:
+                        Intent selectGameIntent = new Intent(getApplicationContext(),SelectGameActivity.class);
+                        startActivity(selectGameIntent);
+                        break;
                     case R.id.deleteScore:
                         deleteTurn();
                         break;
@@ -526,11 +532,42 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
 
         dbHelp = new DbHelp(this);
         mDatabase = dbHelp.getWritableDatabase();
+//        dbHelp.addTable(mDatabase);
+
+//        addGame();
+
         mCursorPlayers = refreshPlayerCursor();
         mCursorScores = refreshScoreCursor();
-
+        mCursorGames = refreshGamesCursor();
+        logGamesTableContents();
         initRecycler();
-        longClickMenu(true);
+        if (mCursorPlayers.getCount() < 4) {
+            longClickMenu(true);
+        }
+    }
+
+    private void addGame() {
+        ContentValues cv = new ContentValues();
+
+//        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Qwirkle");
+//        cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, 0);
+//        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, 2131230919); // Out of tiles
+//        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, 2131230920); // 1st Out
+////        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_QTY, "");
+//        cv.put(DatabaseNames.GameOptions.COLUMN_EXACTLY, false);
+//        cv.put(DatabaseNames.GameOptions.COLUMN_KEYBOARD, "Qwirkle");
+//        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, false);
+//        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Dhumbal");
+        cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, 0);
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, 2131230919); // Out of tiles
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, 2131230920); // 1st Out
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_QTY, 100);
+        cv.put(DatabaseNames.GameOptions.COLUMN_EXACTLY, false);
+        cv.put(DatabaseNames.GameOptions.COLUMN_KEYBOARD, "Numeric");
+        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+//        gameSelectRecAdapter.updateCursor(refreshPlayerCursor());
     }
 
     private Cursor refreshPlayerCursor() {
@@ -542,6 +579,12 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
     private Cursor refreshScoreCursor() {
         mCursorScores = mDatabase.rawQuery("SELECT * FROM " + ScoreHistory.TABLE_NAME, null);
         return mCursorScores;
+    }
+
+    private Cursor refreshGamesCursor() {
+        mCursorGames = mDatabase.rawQuery("SELECT * FROM " + GameOptions.TABLE_NAME +
+                " ORDER BY " + GameOptions.COLUMN_NAME + " DESC", null);
+        return mCursorGames;
     }
 
     @Override
@@ -662,6 +705,24 @@ public class MainActivity extends AppCompatActivity implements RecAdapter.RecLis
                     "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[1])) +
                     "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[2])) +
                     "\t" + mCursorScores.getString(mCursorScores.getColumnIndex(ScoreHistory.COLUMN_TURN[3])));
+        } while (mCursorScores.moveToNext());
+    }
+
+    private void logGamesTableContents() {
+        Log.i("log","Score History log");
+        if (!mCursorGames.moveToFirst()) {
+            Log.i("log","No history found");
+            return;
+        }
+        do {
+            Log.i("Games Table","R: " + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_NAME)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_QTY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_KEYBOARD)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_SELECTED)));
         } while (mCursorScores.moveToNext());
     }
 

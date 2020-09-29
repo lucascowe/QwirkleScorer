@@ -15,30 +15,26 @@ import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
 import static keepitsimple.store.qwirklescorer.MainActivity.*;
 
 
-public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.ViewHolder> {
+public class GameSelectRecAdapter extends RecyclerView.Adapter<GameSelectRecAdapter.ViewHolder> {
     private Cursor sCursor;
     private RecListener recListener;
 
-    HistoryRecAdapter(Cursor scoreCursor, RecListener listener) {
-        this.sCursor = scoreCursor;
+    public GameSelectRecAdapter(Cursor gameCursor, RecListener listener) {
+        this.sCursor = gameCursor;
         this.recListener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView turn, player1, player2, player3, player4;
-        TextView[] players = {player1, player2, player3, player4};
+        TextView game;
+
         RecListener mRecListener;
         LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView, RecListener recListener) {
             super(itemView);
 
-            turn = itemView.findViewById(R.id.turnTextView);
-            players[0] = itemView.findViewById(R.id.player0TextView);
-            players[1] = itemView.findViewById(R.id.player1TextView);
-            players[2] = itemView.findViewById(R.id.player2TextView);
-            players[3] = itemView.findViewById(R.id.player3TextView);
+            game = itemView.findViewById(R.id.textViewRules);
             linearLayout = itemView.findViewById(R.id.linearLayout);
 
             this.mRecListener = recListener;
@@ -63,6 +59,14 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         }
     }
 
+    String getGameName(int p) {
+        if (sCursor.moveToPosition(p)) {
+            return sCursor.getString(sCursor.getColumnIndex(GameOptions.COLUMN_NAME));
+        }
+        Log.i("Error","Position " + p + " out of range of " + sCursor.getCount());
+        return "Not Found";
+    }
+
     public interface RecListener {
         void onRecClick(int position);
         boolean onRecLongClick(int position);
@@ -70,38 +74,27 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
 
     @NonNull
     @Override
-    public HistoryRecAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.historyrow,parent,false);
+    public GameSelectRecAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gameselectrow,parent,false);
         return new ViewHolder(view,recListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HistoryRecAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GameSelectRecAdapter.ViewHolder holder, int position) {
         if (!sCursor.moveToPosition(position)) {
-            Log.i("history",position + " no row found");
+            Log.i("GAME",position + " no row found");
             return;
         }
         String text;
         String msg;
-        holder.turn.setText(Integer.toString(position + 1));
-        for (int ii = 0; ii < 4; ii++) {
-            if (ii < recAdapter.getItemCount()) {
-                mCursorPlayers.moveToPosition(ii);
-                int playerNum = mCursorPlayers.getInt(mCursorPlayers.getColumnIndex(PlayersTable.COLUMN_NUMBER));
-                text = sCursor.getString(mCursorPlayers.getColumnIndex(PlayersTable.COLUMN_NUMBER));
-                msg = "matched player number " + playerNum;
-            } else {
-                msg = "no match found " + ii + " < " + recAdapter.getItemCount();
-                text = "";
-            }
-            Log.i("history", "row: " + position + " loc: " + ii + " text: " + text + " msg: " + msg);
-            holder.players[ii].setText(text);
+        try {
+            holder.game.setText(sCursor.getString(mCursorPlayers.getColumnIndex(PlayersTable.COLUMN_NUMBER)));
+
+        } catch (Exception e) {
+            Log.i("Binding Error", " Position " + 1);
         }
-        if (position % 2 == 1) {
-            holder.linearLayout.setBackgroundColor(0x992196F3);
-        } else {
-            holder.linearLayout.setBackgroundColor(0);
-        }
+
+
     }
 
     @Override
@@ -119,4 +112,3 @@ public class HistoryRecAdapter extends RecyclerView.Adapter<HistoryRecAdapter.Vi
         }
     }
 }
-

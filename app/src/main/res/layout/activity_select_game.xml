@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectGameActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGameSelect"
+        android:layout_width="250dp"
+        android:layout_height="135dp"
+        android:layout_marginStart="149dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="21"
+        android:background="#DD555555"
+        android:gravity="center_horizontal"
+        android:text="Select Game"
+        android:textColor="#FFFFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewStartingScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="14dp"
+        android:text="Starting Score:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/editStartingScore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editStartingScore" />
+
+    <EditText
+        android:id="@+id/editStartingScore"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/textViewStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewGameSelect" />
+
+    <TextView
+        android:id="@+id/textViewFinishBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Finish By:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/editStartingScore" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupFinishBy"
+        android:layout_width="229dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        app:layout_constraintStart_toStartOf="@+id/editStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/editStartingScore">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="rbClick"
+            android:tag="Score"
+            android:text="Score Reached" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="rbClick"
+            android:tag="Rounds"
+            android:text="Rounds Completed" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="rbClick"
+            android:tag="Out"
+            android:text="Out of cards or whatever..." />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewFinishWhen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Finish When:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupFinishBy" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupFinishWhen"
+        android:layout_width="229dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        app:layout_constraintStart_toStartOf="@+id/editStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupFinishBy">
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="1st"
+            android:text="1st Out" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="Last"
+            android:text="Last Left" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewTargetScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="14dp"
+        android:text="Target Score:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextTargetScore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTargetScore" />
+
+    <EditText
+        android:id="@+id/editTextTargetScore"
+        android:layout_width="120dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="@+id/editStartingScore"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupFinishWhen" />
+
+    <CheckBox
+        android:id="@+id/checkBoxExactly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="Exactly"
+        app:layout_constraintStart_toEndOf="@+id/editTextTargetScore"
+        app:layout_constraintTop_toTopOf="@+id/textViewTargetScore" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTargetScore">
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="buttonSave"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/buttonUseRules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Play These Rules" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,6 +25,18 @@ class DatabaseNames {
         public static final String[] COLUMN_TURN = {"p1turn","p2turn","p3turn","p4turn"};
     }
 
+    public static final class GameOptions implements  BaseColumns {
+        public static final String TABLE_NAME = "game_options";
+        public static final String COLUMN_NAME = "game_name";
+        public static final String COLUMN_START_SCORE = "start_score";
+        public static final String COLUMN_FINISH_BY = "finish_by";
+        public static final String COLUMN_FINISH_WHEN = "finish_when";
+        public static final String COLUMN_FINISH_QTY = "finish_qty";
+        public static final String COLUMN_EXACTLY = "exactly";
+        public static final String COLUMN_KEYBOARD = "keyboard";
+        public static final String COLUMN_SELECTED = "selected";
+    }
+
     public static final class Returns {
         public static final int FAIL = -1;
         public static final int SUCCESS = 1;

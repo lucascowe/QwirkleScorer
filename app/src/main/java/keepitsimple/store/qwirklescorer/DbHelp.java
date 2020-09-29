@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
 
@@ -39,6 +40,16 @@ class DbHelp extends SQLiteOpenHelper {
                 ScoreHistory.COLUMN_TURN[2] + " VARCHAR, " +
                 ScoreHistory.COLUMN_SCORE[3] + " INT(4), " +
                 ScoreHistory.COLUMN_TURN[3] + " VARCHAR)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + GameOptions.TABLE_NAME + " (" +
+                GameOptions.COLUMN_NAME + " VARCHAR, " +
+                GameOptions.COLUMN_START_SCORE + " INT(4), " +
+                GameOptions.COLUMN_FINISH_BY + " INT(5), " +
+                GameOptions.COLUMN_FINISH_WHEN + " INT(5), " +
+                GameOptions.COLUMN_FINISH_QTY + " INT(4), " +
+                GameOptions.COLUMN_EXACTLY + " BOOLEAN, " +
+                GameOptions.COLUMN_KEYBOARD + " VARCHAR, " +
+                GameOptions.COLUMN_SELECTED + " BOOLEAN)");
     }
 
     @Override
