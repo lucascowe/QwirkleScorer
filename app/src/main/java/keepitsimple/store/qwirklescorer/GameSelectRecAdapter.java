@@ -88,7 +88,13 @@ public class GameSelectRecAdapter extends RecyclerView.Adapter<GameSelectRecAdap
         String text;
         String msg;
         try {
-            holder.game.setText(sCursor.getString(mCursorPlayers.getColumnIndex(PlayersTable.COLUMN_NUMBER)));
+            holder.game.setText(sCursor.getString(sCursor.getColumnIndex(GameOptions.COLUMN_NAME)));
+            Log.i("Recycler View:", String.valueOf(holder.game.getText()));
+            if (sCursor.getInt(sCursor.getColumnIndex(PlayersTable.COLUMN_SELECTED)) == 1) {
+                holder.game.setBackgroundColor(0xAA2196F3);
+            } else {
+                holder.game.setBackgroundColor(0xDD555555);
+            }
 
         } catch (Exception e) {
             Log.i("Binding Error", " Position " + 1);
@@ -111,4 +117,6 @@ public class GameSelectRecAdapter extends RecyclerView.Adapter<GameSelectRecAdap
             notifyDataSetChanged();
         }
     }
+
+
 }

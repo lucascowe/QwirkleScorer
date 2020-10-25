@@ -17,16 +17,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static keepitsimple.store.qwirklescorer.DatabaseNames.*;
+import static keepitsimple.store.qwirklescorer.MainActivity.mDatabase;
+
 public class SelectGameActivity extends AppCompatActivity implements GameSelectRecAdapter.RecListener{
 
     private RecyclerView recyclerView;
     static GameSelectRecAdapter gameSelectRecAdapter;
     static Cursor mCursorGames;
 
-    RadioGroup rg;
-    RadioButton rb;
-    TextView tvTarget;
-    EditText etTarget;
+    RadioGroup rgFinishWhen, rgFinishBy;
+    RadioButton rbFinishWhen, rbFinishBy;
+    TextView tvTargetScore, tvStartingScore;
+    EditText etStartScore ,etTargetScore;
     CheckBox cbExactly;
     int radiobuttonID;
 
@@ -36,23 +39,44 @@ public class SelectGameActivity extends AppCompatActivity implements GameSelectR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_game);
-        tvTarget = (TextView) findViewById(R.id.textViewTargetScore);
-        etTarget = (EditText) findViewById(R.id.editTextTargetScore);
+
+        mCursorGames = refreshGamesCursor();
+        tvTargetScore = (TextView) findViewById(R.id.textViewTargetScore);
+        etTargetScore = (EditText) findViewById(R.id.editTextTargetScore);
+        rgFinishWhen = (RadioGroup) findViewById(R.id.radioGroupFinishWhen);
+        rgFinishBy = findViewById(R.id.radioGroupFinishBy);
+        cbExactly = (CheckBox) findViewById(R.id.checkBoxExactly);
+        etStartScore = findViewById(R.id.editStartingScore);
+        cbExactly = findViewById(R.id.checkBoxExactly);
+        rgFinishBy = findViewById(R.id.radioGroupFinishBy);
 
         recyclerView = findViewById(R.id.recyclerViewGameSelect);
-//        gameSelectRecAdapter =  new RecAdapter(mCursorGames, this);
+        gameSelectRecAdapter =  new GameSelectRecAdapter(mCursorGames, this);
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(gameSelectRecAdapter);
 
         initRecycler();
+//        mDatabase.execSQL("UPDATE " + GameOptions.TABLE_NAME + " SET " + GameOptions.COLUMN_SELECTED +
+//                "=1 WHERE " + GameOptions.COLUMN_NAME + " = 'Custom'");
+//        mDatabase.delete(GameOptions.TABLE_NAME,GameOptions.COLUMN_NAME + "= 'Custom'",null);
+
+
+        logGamesTableContents();
+
+        gameSelectRecAdapter.updateCursor(refreshGamesCursor());
+//
+//        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, 1);
+//        gameSelectRecAdapter.updateCursor(refreshGamesCursor());
+
+
     }
 
     private void initRecycler() {
         // link Adapter to
         recyclerView = findViewById(R.id.recyclerViewGameSelect);
-        gameSelectRecAdapter = new GameSelectRecAdapter(MainActivity.mCursorGames, this);
+        gameSelectRecAdapter = new GameSelectRecAdapter(mCursorGames, this);
 
         // Set up Recycler manager to link to adapter
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
@@ -62,7 +86,10 @@ public class SelectGameActivity extends AppCompatActivity implements GameSelectR
 
     @Override
     public void onRecClick(int position) {
-
+        selectGame(position);
+        loadGameData();
+        gameSelectRecAdapter.updateCursor(refreshGamesCursor());
+//        longClickMenu(false);
     }
 
     @Override
@@ -70,58 +97,131 @@ public class SelectGameActivity extends AppCompatActivity implements GameSelectR
         return false;
     }
 
+    private void selectGame(int position) {
+        Log.i("Debug","selecting game in position " + position);
+//        if ()
+        // clear selection
+        mDatabase.execSQL("UPDATE " + GameOptions.TABLE_NAME + " SET " + GameOptions.COLUMN_SELECTED +
+                "=0 WHERE " + GameOptions.COLUMN_SELECTED + " = 1");
+        // set new selection
+        Log.i("RECYCLER POSITION", String.valueOf(position));
+        mDatabase.execSQL("UPDATE " + GameOptions.TABLE_NAME + " SET " + GameOptions.COLUMN_SELECTED +
+                "=1 WHERE " + GameOptions.COLUMN_NAME + " = '" + gameSelectRecAdapter.getGameName(position) + "'");
+    }
 
-
+    private Cursor refreshGamesCursor() {
+        mCursorGames = MainActivity.mDatabase.rawQuery("SELECT * FROM " + DatabaseNames.GameOptions.TABLE_NAME +
+                " ORDER BY " + DatabaseNames.GameOptions.COLUMN_NAME + " ASC", null);
+        return mCursorGames;
+    }
 
     public void rbClick(View view) {
-        RadioGroup rg = findViewById(R.id.radioGroupFinishBy);
-        radiobuttonID = rg.getCheckedRadioButtonId();
-        rb = (RadioButton) findViewById(radiobuttonID);
-        cbExactly = (CheckBox) findViewById(R.id.checkBoxExactly);
-//        Toast.makeText(this, String.valueOf(rb.getTag()), Toast.LENGTH_LONG).show();
 
-        switch (String.valueOf(rb.getTag())) {
+        int rgSelectID = rgFinishBy.getCheckedRadioButtonId();
+        rbFinishBy = findViewById(rgSelectID);
+        switch (String.valueOf(rbFinishBy.getTag())) {
             case "Score": //  ID 2131230917
-                Toast.makeText(this, String.valueOf(radiobuttonID), Toast.LENGTH_LONG).show();
-                tvTarget.setText("Target Score:");
-                tvTarget.setVisibility(View.VISIBLE);
-                etTarget.setVisibility(View.VISIBLE);
+                tvTargetScore.setText("Target Score:");
+                tvTargetScore.setVisibility(View.VISIBLE);
+                etTargetScore.setVisibility(View.VISIBLE);
                 cbExactly.setVisibility(View.VISIBLE);
-                etTarget.setText(String.valueOf(radiobuttonID));
+
                 break;
             case "Rounds":  //  ID 2131230918
-                Toast.makeText(this, String.valueOf(radiobuttonID), Toast.LENGTH_LONG).show();
-                tvTarget.setText("Rounds:");
-                tvTarget.setVisibility(View.VISIBLE);
+                tvTargetScore.setText("Rounds:");
+                tvTargetScore.setVisibility(View.VISIBLE);
+                etTargetScore.setVisibility(View.VISIBLE);
                 cbExactly.setVisibility(View.INVISIBLE);
-                etTarget.setText(String.valueOf(radiobuttonID));
+
                 break;
             case "Out":  //  ID 2131230919
-                Toast.makeText(this, String.valueOf(radiobuttonID), Toast.LENGTH_LONG).show();
-                tvTarget.setVisibility(View.INVISIBLE);
-                etTarget.setVisibility(View.INVISIBLE);
+                tvTargetScore.setVisibility(View.INVISIBLE);
+                etTargetScore.setVisibility(View.INVISIBLE);
                 cbExactly.setVisibility(View.INVISIBLE);
-                etTarget.setText(String.valueOf(radiobuttonID));
-                rbSaved = radiobuttonID;
                 break;
         }
     }
 
+    public void loadGameData() {
+        etStartScore.setText(mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)));
+        Log.i("Load StartScore", mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)));
+        rgFinishBy = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)));
+        Log.i("Load Finishby", String.valueOf(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY))));
+        rbFinishBy.setChecked(true);
+        rgFinishWhen = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)));
+        rbFinishWhen.setChecked(true);
+//        cbExactly.isChecked(mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)));
+    }
+
     public void buttonSave(View view) {
-        RadioButton rbSelected = (RadioButton) findViewById(rbSaved);
-        Toast.makeText(this, String.valueOf(rbSaved), Toast.LENGTH_LONG).show();
-        rbSelected.setChecked(true);
-//        etTarget.setText(String.valueOf());
+        ContentValues cv = new ContentValues();
 
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Dhumbal");
+        cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, Integer.valueOf(String.valueOf(etStartScore.getText())));
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, rgFinishBy.getCheckedRadioButtonId()); //2131230919); // Out of tiles
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, rgFinishWhen.getCheckedRadioButtonId()); //2131230920); // 1st Out
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_QTY, Integer.valueOf(String.valueOf(etTargetScore.getText())));
+        cv.put(DatabaseNames.GameOptions.COLUMN_EXACTLY, cbExactly.isChecked() == true ? 1 : 0);
+        cv.put(DatabaseNames.GameOptions.COLUMN_KEYBOARD, "Numeric");
+        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, gameSelectRecAdapter.getItemCount() == 0 ? 1 : 0);
+        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+        gameSelectRecAdapter.updateCursor(refreshGamesCursor());
+    }
 
-        cbExactly = (CheckBox) findViewById(R.id.checkBoxExactly);
-        boolean exactly = cbExactly.isChecked();
-        Toast.makeText(this, String.valueOf(exactly), Toast.LENGTH_LONG).show();
+    public void resetDefaultGames(View view) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Custom");
+        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, 1);
+        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Qwirkle");
+        cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, Integer.valueOf(String.valueOf(etStartScore.getText())));
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, rgFinishBy.getCheckedRadioButtonId()); //2131230919); // Out of tiles
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, rgFinishWhen.getCheckedRadioButtonId()); //2131230920); // 1st Out
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_QTY, Integer.valueOf(String.valueOf(etTargetScore.getText())));
+//        cv.put(DatabaseNames.GameOptions.COLUMN_EXACTLY, cbExactly.isChecked() == true ? 1 : 0);
+        cv.put(DatabaseNames.GameOptions.COLUMN_KEYBOARD, "Qwirkle");
+        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, 0);
+        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Dhumbal");
+        cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, Integer.valueOf(String.valueOf(etStartScore.getText())));
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, rgFinishBy.getCheckedRadioButtonId()); //2131230919); // Out of tiles
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, rgFinishWhen.getCheckedRadioButtonId()); //2131230920); // 1st Out
+        cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_QTY, Integer.valueOf(String.valueOf(etTargetScore.getText())));
+        cv.put(DatabaseNames.GameOptions.COLUMN_EXACTLY, cbExactly.isChecked() == true ? 1 : 0);
+        cv.put(DatabaseNames.GameOptions.COLUMN_KEYBOARD, "Numeric");
+        cv.put(DatabaseNames.GameOptions.COLUMN_SELECTED, 0);
+        mDatabase.insert(DatabaseNames.GameOptions.TABLE_NAME,null, cv);
+
+        gameSelectRecAdapter.updateCursor(refreshGamesCursor());
     }
 
     public void buttonPlay(View view) {
 
     }
+
+    private void logGamesTableContents() {
+        Log.i("log","Score History log");
+        if (!mCursorGames.moveToFirst()) {
+            Log.i("log","No history found");
+            return;
+        }
+        do {
+            Log.i("Games Table","R: " + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_NAME)) +
+                    "\t" + GameOptions.COLUMN_START_SCORE + ":" +mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)) +
+                    "\t" + GameOptions.COLUMN_FINISH_QTY + ":" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_QTY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)) +
+                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_KEYBOARD)) +
+                    "\t" + GameOptions.COLUMN_SELECTED + ":" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_SELECTED)));
+        } while (mCursorGames.moveToNext());
+    }
+
+
+
 
 //    private int getSelected() {
 //        Cursor c = MainActivity.mDatabase.rawQuery("SELECT * FROM " + DatabaseNames.GameOptions.TABLE_NAME +

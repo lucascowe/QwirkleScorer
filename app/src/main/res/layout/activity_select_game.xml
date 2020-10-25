@@ -6,12 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".SelectGameActivity">
 
+    <TextView
+        android:id="@+id/textViewSelectGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="14dp"
+        android:text="Select Game:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/editStartingScore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewGameSelect" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewGameSelect"
         android:layout_width="250dp"
         android:layout_height="135dp"
         android:layout_marginStart="149dp"
         android:layout_marginTop="14dp"
+        android:background="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
 

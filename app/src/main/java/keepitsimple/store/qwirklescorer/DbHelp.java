@@ -28,7 +28,7 @@ class DbHelp extends SQLiteOpenHelper {
                 PlayersTable.COLUMN_SCORE + " INT(4), " +
                 PlayersTable.COLUMN_TURNS + " INT(3), " +
                 PlayersTable.COLUMN_TURN + " VARCHAR, " +
-                PlayersTable.COLUMN_SELECTED + " BOOLEAN)");
+                PlayersTable.COLUMN_SELECTED + " INT(1))");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ScoreHistory.TABLE_NAME + " (" +
                 ScoreHistory.COLUMN_ROUND + " INT(3), " +
@@ -47,10 +47,25 @@ class DbHelp extends SQLiteOpenHelper {
                 GameOptions.COLUMN_FINISH_BY + " INT(5), " +
                 GameOptions.COLUMN_FINISH_WHEN + " INT(5), " +
                 GameOptions.COLUMN_FINISH_QTY + " INT(4), " +
-                GameOptions.COLUMN_EXACTLY + " BOOLEAN, " +
+                GameOptions.COLUMN_EXACTLY + " INT(1), " +
                 GameOptions.COLUMN_KEYBOARD + " VARCHAR, " +
-                GameOptions.COLUMN_SELECTED + " BOOLEAN)");
+                GameOptions.COLUMN_SELECTED + " INT(1))");
     }
+
+    public void updateGameOptions(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + GameOptions.TABLE_NAME);
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + GameOptions.TABLE_NAME + " (" +
+                GameOptions.COLUMN_NAME + " VARCHAR, " +
+                GameOptions.COLUMN_START_SCORE + " INT(4), " +
+                GameOptions.COLUMN_FINISH_BY + " INT(5), " +
+                GameOptions.COLUMN_FINISH_WHEN + " INT(5), " +
+                GameOptions.COLUMN_FINISH_QTY + " INT(4), " +
+                GameOptions.COLUMN_EXACTLY + " INT(1), " +
+                GameOptions.COLUMN_KEYBOARD + " VARCHAR, " +
+                GameOptions.COLUMN_SELECTED + " INT(1))");
+
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
