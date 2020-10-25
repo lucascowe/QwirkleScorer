@@ -87,7 +87,7 @@ public class SelectGameActivity extends AppCompatActivity implements GameSelectR
     @Override
     public void onRecClick(int position) {
         selectGame(position);
-        loadGameData();
+        loadGameData(position);
         gameSelectRecAdapter.updateCursor(refreshGamesCursor());
 //        longClickMenu(false);
     }
@@ -142,21 +142,35 @@ public class SelectGameActivity extends AppCompatActivity implements GameSelectR
         }
     }
 
-    public void loadGameData() {
+    public void loadGameData(int position) {
+//        do {
+//            Log.i("Games Table","R: " + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_NAME)) +
+//                    "\t" + GameOptions.COLUMN_START_SCORE + ":" +mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)) +
+//                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)) +
+//                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)) +
+//                    "\t" + GameOptions.COLUMN_FINISH_QTY + ":" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_QTY)) +
+//                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)) +
+//                    "\t" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_KEYBOARD)) +
+//                    "\t" + GameOptions.COLUMN_SELECTED + ":" + mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_SELECTED)));
+//        } while (mCursorGames.moveToNext());
+        Log.i("Count", String.valueOf(mCursorGames.getCount()));
+        mCursorGames.moveToPosition(position);
         etStartScore.setText(mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)));
-        Log.i("Load StartScore", mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)));
-        rgFinishBy = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)));
+//        Log.i("Load StartScore", mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_START_SCORE)));
         Log.i("Load Finishby", String.valueOf(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY))));
+        Log.i("Load Finishwhen", String.valueOf(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN))));
+        rbFinishBy = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY)));
+//        Log.i("Load Finishby", String.valueOf(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_BY))));
         rbFinishBy.setChecked(true);
-        rgFinishWhen = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)));
+        rbFinishWhen = findViewById(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_FINISH_WHEN)));
         rbFinishWhen.setChecked(true);
-//        cbExactly.isChecked(mCursorGames.getString(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)));
+        cbExactly.setChecked(mCursorGames.getInt(mCursorGames.getColumnIndex(GameOptions.COLUMN_EXACTLY)) == 1 ? true : false);
     }
 
     public void buttonSave(View view) {
         ContentValues cv = new ContentValues();
 
-        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Dhumbal");
+        cv.put(DatabaseNames.GameOptions.COLUMN_NAME, "Qwirkle");
         cv.put(DatabaseNames.GameOptions.COLUMN_START_SCORE, Integer.valueOf(String.valueOf(etStartScore.getText())));
         cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_BY, rgFinishBy.getCheckedRadioButtonId()); //2131230919); // Out of tiles
         cv.put(DatabaseNames.GameOptions.COLUMN_FINISH_WHEN, rgFinishWhen.getCheckedRadioButtonId()); //2131230920); // 1st Out
